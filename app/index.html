@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Display</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta charset='UTF-8'>
+	
+	<script src="../js/ajax.js"></script>
+	<link rel='icon' href='img/icon.ico' type='image/x-icon'> 
+	<script type="text/javascript" src='../js/jquery.js'></script>
+	<script type="text/javascript" src='../js/jquery.min.js'></script>
+	<link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+
+	<script src="../semantic/dist/semantic.min.js"></script>
+	<script src="../semantic/dist/semantic.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		
+		displayTables();
+
+	});
+
+	function displayTables() {
+		setTimeout(function () { 
+			$.ajax({
+		        type: "GET",
+		        url: "http://keyubers.esy.es/Index.php/luckey/app/list",
+		        data: "",
+		        success: function(result) {
+		        	var content = "";
+		        	var table = "<table class='ui inverted  table' style='width: 70%; margin-top: 50px; margin-left: 15%; font-size: 40px; opacity: 0.8;'><tbody>";
+		        	try {
+			        	obj = eval("({"+result+"})");
+			        	console.log(obj);
+			        	if(obj.data != null)
+				        	$.each(obj.data, function(k, v) {
+				        		if(k == 0)
+				        			content += "<tr><td>"+obj.data[k].text+"</td><td>Estamos preparando tu bebida</td></tr>";
+				        		else
+				        			content += "<tr><td>"+obj.data[k].text+"</td><td>En espera</td></tr>";
+							    console.log(obj.data[k]);
+							});
+				        else {
+				        	content += ""; 
+				        }
+				    } catch (e) {
+				    	content += "";
+				    }
+					table += content+"</tbody></table>";
+					$("#tableList").html(table);
+		        }, 
+		        error: function(data) {
+		        }
+	    	});
+			$.ajax({
+			
+		        type: "GET",
+		        url: "http://keyubers.esy.es/Index.php/luckey/app/ready",
+		        data: "",
+		        success: function(result) {
+	
+		        	var tableReady = "<table class='ui huge table' style='width: 70%; margin-top: 50px; margin-left: 15%; font-size: 60px; opacity: 0.9;'><tbody>";
+		        	obj = eval("({"+result+"})");
+					tableReady += "<tr><td>"+obj.data[0].text+"</td><td>Tu bebida esta lista!</td></tr></tbody></table>";
+					$("#tableReady").html(tableReady);
+		        }, 
+		        error: function(data) {
+		        }
+	    	});
+
+			
+		
+			displayTables();
+	    }, 4000);
+	    
+	}
+				
+	</script>
+</head>
+<body style="background-image: url(../img/wall.gif); background-size: 100% 100%;">
+
+<!-- <audio src='../sound/music.mp3' preload='auto' loop autoplay='autoplay'></audio> -->
+
+<span id='tableReady' style="margin-top: 50px;"></span>
+<span id="tableList" style="margin-top: 50px;"></span>
+
+</body>
+</html>
