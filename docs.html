@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta charset='UTF-8'>
+	<title>API Docs</title>
+
+	<script src="js/ajax.js"></script>
+	<link rel='icon' href='img/icon.ico' type='image/x-icon'> 
+	<script type="text/javascript" src='js/jquery.js'></script>
+	<script type="text/javascript" src='js/jquery.min.js'></script>
+	<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="semantic/dist/semantic.min.js"></script>
+	<script src="semantic/dist/semantic.js"></script>
+	<script src="js/docs.js"></script>
+
+</head>
+
+<body>
+
+
+<!-- NAVBAR -->
+	<div class="ui inverted large fixed menu" style="z-index: 4;">
+	    <a class='item' id='sidebarbtn'>
+			<i class='sidebar icon'></i>
+	    </a>
+
+	  	<label class="right item">
+	    	<i class="cube icon"></i>
+	   	 	Luckey graph API  
+	    </label>
+	</div>
+
+
+<!-- OVER THE NAVBAR -->
+	<div style="width: 100%; height: 80px;"></div>
+
+
+<!-- SIDEBAR -->
+	<div class='hide' id='sidebar' style="">
+		<div class="ui left fixed inverted vertical menu" style="overflow: scroll; margin-top: 17px; z-index: 3;">
+			<div class='item'></div>
+			<div class="item">
+				<img class="ui tiny centered image" src="img/invertedkeyuber.png">
+
+			</div>
+			<center>
+				<i id='DesktopIcon' class='large green desktop icon' style="cursor: pointer;"></i><i id='TabletIcon' class='large grey tablet icon' style="cursor: pointer;"></i>
+			</center>
+
+			<div class="item">
+				<div class='header'>
+					<i class='heartbeat icon'></i>
+					API
+				</div>
+				
+				<div class="menu">
+					<a class="item" onClick="showTextTemplate('introduction')" >Introduction</a>
+					<!-- <a class="item" onClick="showTextTemplate('gettingstarted')">Getting started</a> -->
+					<a class="item" id='item' onClick="showTemplate('apiroot')">Test API</a>
+				</div>
+			</div>
+
+			<div class="item">
+				<div class='header'>
+					<i class='user floated right icon'></i>
+					User
+				</div>
+
+				<div class='menu'>
+					<a class="item" id='item' onClick="showTemplate('users')" >Show all</a>
+					<a class="item" id='item' onClick="showTemplate('userinfo')">Show by ID</a>
+					<a class="item" id='item' onClick="showTemplate('userid')">Login</a>
+					<a class="item" id='item' onClick="showTemplate('createuser')">Create</a>
+					<a class="item" id='item' onClick="showTemplate('userupdate')">Update (Basic)</a>
+					<a class="item" id='item' onClick="showTemplate('userupdatepassword')">Update (Password)</a>
+					<a class="item" id='item' onClick="showTemplate('userdelete')">Delete</a>
+					<a class="item" id='item' onClick="showTemplate('favoritelist')">Favorite business list</a>
+					<a class="item" id='item' onClick="showTemplate('history')">History</a>
+					<a class="item" id='item' onClick="showTemplate('creditcardlist')">Credit card list</a>
+					<a class="disabled red item" id='item' onClick="showTemplate('describeuser')" style="cursor: not-allowed;">Describe by ID</a>			
+				</div>
+			</div>
+
+			<div class="item">
+				<div class='header'>
+					<i class='suitcase icon'></i>
+					Business
+					
+				</div>
+
+				<div class='menu'>
+					<a class="item" id='item' onClick="showTemplate('business')">Show all</a>
+					<a class="item" id='item' onClick="showTemplate('businessinfo')">Show by ID</a>
+					<a class="item" id='item' onClick="showTemplate('createbusiness')">Create</a>
+					<a class="item" id='item' onClick="showTemplate('updatebusiness')">Update</a>
+					<a class="item" id='item' onClick="showTemplate('position')">Update (position)</a>
+					<a class="item" id='item' onClick="showTemplate('deletebusiness')">Delete</a>
+					<a class="disabled item" id='item' onClick="showTemplate('describebusiness')" style="cursor: not-allowed;">Describe by ID</a>	
+				</div>
+			</div>
+
+
+			<div class="item">
+				<div class='header'>
+					<i class='credit card icon'></i>
+					Credit card
+					
+				</div>
+
+				<div class='menu'>
+					<a class="item" id='item' onClick="showTemplate('credit_card')">Show all</a>
+					<a class="item" id='item' onClick="showTemplate('credit_cardinfo')">Show by ID</a>
+					<a class="item" id='item' onClick="showTemplate('createcredit_card')">Create</a>
+					<a class="item" id='item' onClick="showTemplate('credit_cardupdate')">Update</a>
+					<a class="item" id='item' onClick="showTemplate('credit_carddelete')">Delete</a>
+
+				</div>
+			</div>
+
+
+			<div class="item">
+				<div class='header'>
+					<i class='checkered flag card icon'></i>
+					Service 
+					
+				</div>
+
+				<div class='menu'>
+					<a class="item" id='item' onClick="showTemplate('service')">Show all</a>
+					<a class="item" id='item' onClick="showTemplate('serviceinfo')">Show by ID</a>
+					<a class="item" id='item' onClick="showTemplate('createservice')">Create</a>
+					<a class="item" id='item' onClick="showTemplate('serviceupdate')">Update</a>
+					<a class="item" id='item' onClick="showTemplate('deleteservice')">Delete</a>
+
+				</div>
+			</div>
+
+			<div class="item">
+				<div class='header'>
+					<i class='check circle outline card icon'></i>
+					Done service
+					
+				</div>
+
+				<div class='menu'>
+					<a class="item" id='item' onClick="showTemplate('done_service')">Show all</a>
+					<a class="item" id='item' onClick="showTemplate('done_serviceinfo')">Show by ID</a>
+					<a class="item" id='item' onClick="showTemplate('createdone_service')">Create</a>
+					<!-- 
+					<a class="item" id='item' onClick="showTemplate('done_serviceupdate')">Update</a>
+					<a class="item" id='item' onClick="showTemplate('deletedone_service')">Delete</a>
+					-->
+				</div>
+			</div>
+			
+
+		</div>
+	</div>
+<div class="ui dimmer" id='dim' style="z-index: 2;"></div>
+
+
+<!-- CONTAINER -->
+	<div id='content'  style="width: 95%; margin-left: 2.5%; "></div>
+
+
+
+	<br>
+	<a href="#0" class="cd-top">Top</a>
+
+
+<div id='lgmdl' class="ui basic small modal">
+  <div class="content">
+  	<div id='btnscontainer' style="width: 30%; margin-left:35%; ">
+  		<div id='column1' style="width: 100%;">
+	  		<a class='ui massive teal label' value='1' id='lgbtn' style="width: 30%; height: 50px;"></a>
+	  		<a class='ui massive teal label' value='2' id='lgbtn' style="width: 30%; height: 50px;"></a>
+	  		<a class='ui massive teal label' value='3' id='lgbtn' style="width: 30%; height: 50px;"></a>
+  		</div>
+  		<div id='column3' style="width: 100%;">
+	  		<a class='ui massive teal label' value='4' id='lgbtn' style="width: 30%; height: 50px;"></a>
+	  		<a class='ui massive teal label' value='5' id='lgbtn' style="width: 30%; height: 50px;"></a>
+	  		<a class='ui massive teal label' value='6' id='lgbtn' style="width: 30%; height: 50px;"></a>
+  		</div>
+  		<div id='column2' style="width: 100%;">
+	  		<a class='ui massive teal label' value='7' id='lgbtn' style="width: 30%; height: 50px;"></a>
+	  		<a class='ui massive teal label' value='8' id='lgbtn' style="width: 30%; height: 50px;"></a>
+	  		<a class='ui massive teal label' value='9' id='lgbtn' style="width: 30%; height: 50px;"></a>
+  		</div>
+  		<a class='ui massive teal label' value='0' id='lgbtn' style="width: 30%; margin-left: 35%; height: 50px;"></a>
+  	</div>
+  	<div id="scra"></div>
+  </div>
+</div>
+
+</body>
+<!--
+<footer style="width: 100%; margin-bottom: 0px;">
+	<div class="ui black message" >
+		<center>
+			<font style="font-size: 10px; "><i>by <a href="https://www.facebook.com/sergiio.xs">Sergiio.Xs</a></i></font>
+		</center>		
+	</div>
+
+</footer>
+-->
+</html>

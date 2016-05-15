@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta charset='UTF-8'>
+	<title>API Docs</title>
+
+	<script src="js/ajax.js"></script>
+	<link rel='icon' href='img/icon.ico' type='image/x-icon'> 
+	<script type="text/javascript" src='js/jquery.js'></script>
+	<script type="text/javascript" src='js/jquery.min.js'></script>
+	<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+	<script src="semantic/dist/semantic.min.js"></script>
+	<script src="semantic/dist/semantic.js"></script>
+	<style type="text/css">
+
+	iframe { display:block; width:100%; border:none; height: 100%;}
+	body {
+		background-image: url(img/bg11.jpg); 
+		background-size: 100% 100%; 
+	}
+	.bgafter{
+		background-color: #1b1c1d;
+	}
+	.bgbefore{
+		
+		background-color: rgba(50,50,50,1);
+		transition-property: background-color opacity;
+		transition-duration: 7s;
+		opacity: 0.3;
+		
+	}
+
+	</style>
+	<script type="text/javascript">
+		setTimeout( function () {
+			$("#bg").removeClass("bgafter");
+			$("#bg").addClass("bgbefore");
+		}, 1000);
+		
+		$(document).ready(function () {
+					
+			$("#stardocs").on("click", function() {
+				$("body").css("background-color", "rgba(50,50,50,1)")
+				$("#bg").html("<div class='ui active inverted loader'></div>");
+				$("body").html("<iframe src='docs.html'></iframe>");
+			});
+
+
+		});
+
+	</script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+	<div class="ui inverted large fixed menu">
+	    <a class='item' id='sidebarbtn'>
+			<i class='sidebar icon'></i>
+	    </a>
+	  	<a class="right item">
+	   	 	Luckey 1.0
+	    </a>
+	</div>
+
+
+<!-- OVER THE NAVBAR -->
+	<div style="width: 100%; height: 45px;"></div>
+
+	<div class='bgafter' id='bg' style="width: 100%; height: 93%; position: fixed;"></div>
+	<div style="position: absolute; width: 100%;">
+		<center>
+			<label style=" margin-top: 100px;" class='ui black label'>v 1.0</label>
+			<br>
+			<img src="img/invertedkeyuber25.png" style=" margin-top: 10px;">
+			<br>
+			<a >
+				<button class='ui inverted basic huge white button' id='stardocs'>Luckey graph API</button>
+			</a>
+		</center>
+	</div>
+
+</body>
+</html>
