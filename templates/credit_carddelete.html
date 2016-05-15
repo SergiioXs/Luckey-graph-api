@@ -1,0 +1,52 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Delete credit card";
+	var Metodo = "POST";
+	var table = CodeTable(["23", "43", "44", "48", "49", "60"]);
+	var conditions = ConditionTable(["id", "password", "ccid"]);
+	var Descripcion = "Deletes all trace of an existing credit card.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"credit_card/delete/:ccid";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var id = $("#id").val();
+		var ccid = $("#ccid").val();
+		var password = $("#password").val();
+		var data = "password="+password+"&id="+id;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"credit_card/delete/"+ccid, Metodo, data);
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>User ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User id" value="">
+</div>
+
+<br><br>
+<label>Credit card ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='ccid' type="text" placeholder="Credit card id" value="">
+</div>
+
+<br><br>
+
+<label>Password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="Password" value="">
+</div>
+
+<br><br>
+<button class='ui blue button' style="width: 95%;" id='btn'>Delete credir card</button>

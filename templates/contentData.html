@@ -1,0 +1,83 @@
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '197518167289882',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<script type="text/javascript">
+		$("#mainLoader").removeClass("active");
+		
+		$("#ChangePosition").on("click", function () {
+	        $("#InputCont").toggleClass("sixteen wide column five wide column");
+	        $("#OutputCont").toggleClass("sixteen  wide column eleven wide column");
+	        $("#DividerCont").toggleClass("horizontal vertical");
+	        $("#DesktopIcon").toggleClass("large grey desktop icon large green desktop icon");
+	        $("#TabletIcon").toggleClass("large green tablet icon large grey tablet icon");
+    	});
+
+</script>
+<div class='ui segment' id='contentData' style="margin-top: 0px;">
+		<h3 class="ui dividing header">
+		    <!-- TITULO -->
+		    
+		    <span id='Titulo'></span><div id='method' class='ui teal tiny label'></div>
+		    <br>
+		    <font id='URL' class='sub header'></font>
+		    
+		</h3>
+
+		<!-- DESCRIPCION -->
+
+		<div class="ui message" id='msgdescription'>
+	    	<p id='Descripcion'></p>
+
+	    </div>
+	    <div id='console'></div>
+	    <div class='ui segment'>
+	    	<div class="ui grid">
+			    
+			    <!-- INPUT -->
+			    <div id='InputCont' class="five wide column">
+			  		<h3 class="ui dividing header">
+					  Input
+					</h3>
+				     <div id='input' style="width: 90%; margin-left: 5%;">
+				    	
+				    </div>
+			    </div>
+			    
+			    <div id='DividerCont' class="ui vertical divider">
+			  	  <i id='ChangePosition' class="retweet icon" style="cursor: pointer;"></i>
+			    </div>
+			    
+			    <!-- OUTPUT -->
+			    <div id='OutputCont' class="eleven wide column">
+			  		<h3 class="ui dividing header">
+		 				Output
+					</h3>
+					<pre id='output'></pre>
+			    </div>
+			</div>
+	    </div>
+
+    <div class='ui divider'></div>
+    <!-- FACEBOOK COMMENTS -->
+    
+    <div id='comments' style='z-index: 1;'><div class='fb-comments' data-order-by='time' data-href='http://keyuber.net/APPI/docs.html#home' data-width='100%' data-numposts='10' ></div></div>
+	<div class='ui active inverted dimmer' id='mainLoader'><div class='ui text loader'>Loading</div></div>
+
+</div>
+<div id="fb-root"></div>
+

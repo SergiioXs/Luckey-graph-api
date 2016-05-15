@@ -1,0 +1,98 @@
+
+<!-- CONTAINER -->
+
+<div  id='textContent' style="width: 100%; ">
+	<div class='ui segment' >
+		<h1 class="ui header">
+			Welcome to Luckey API documentation!
+		</h1>
+		<div class="ui divider"></div>
+	
+			<img class="ui small centered image" src="img/invertedkeyuber.png">
+		
+		<h3 class="ui dividing header">Introduction</h3>
+		This site is the specification for the Luckey API (LAPI). The Luckey API is part of the back end that describes a RESTful Web Service in the overall architecture. LAPI provides a way to consumers to manipulate the actual data source. Therefore, LAPI is the middleware software that expose the data to the outside world, in order to be consumed by the Luckey mobile application.
+
+		<h3 class="ui dividing header">
+			API Specs
+		</h3>
+		API keywords and terminology
+		<br><b>This terms are used throughout the API Spec section.</b>
+		<ul>
+			<li>URI. Unique Resource Identifier is the resource id that provides an interactions to the API.</li>
+			<li>CRUD. Create, retrieve, update and delete are the common operations that are available to manipulate a data source.</li>
+			<li>Entity. An entity refers to a particular set of data of a particular domain. This represent the class of a particular set of data. E.g. All user related data is represented by the user entity. Even if the data is a collection of data, the data is of a particular domain. For that case, the set of data within the collection is related to a particular entity. Notice that not all data for a particular domain is an entity. E.g. tables that relates other tables are not entities.</li>
+			<li>Record. A set of data related of a particular entity. E.g. One user is one record.</li>
+			<li>Records. A collection of records. E.g. ten users are ten records.</li>
+		</ul>
+
+		<h3 class="ui dividing header">
+			API specifications
+		</h3>
+		<ul>
+			<li>All URI’s are be written in lowercase.</li>
+			<li>The API have a root access.</li>
+			<li>All entities have implement CRUD.</li>
+			<li>For each entity, the URI are namespaced. E.g. /root/persons.</li>
+			<li>All request to the API return a response.</li>
+			<li>The internet media type for representing data is JSON.</li>
+			<li>The API MUST implement standard HTTP verbs (methods).</li>
+			<li>For create implementation HTTP POST method SHOULD be used.</li>
+			<li>For retrieve implementation HTTP GET method SHOULD be used.</li>
+			<li>For update implementation HTTP PUT method SHOULD be used.</li>
+		</ul>
+
+		<h3 class="ui dividing header">
+			The API root
+		</h3>
+		The LAPI have a root access for consumers. This not return any data to the client, but a welcome to the API. Root access be represented by the URI:
+		<div class="ui black message">/luckey</div>
+
+		<h3 class="ui dividing header">
+			Entity namespace
+		</h3>
+		For each entity, the URI to perform a request to a particular functionality are namespaced:
+		<div class="ui black message">luckey/business</div>
+
+		<h3 class="ui dividing header">
+			JSON Struct
+		</h3>
+		For every API response, the JSON struct will be the same. This is for purposes to do the developing phase or usage of the API more faster and simple.
+		<div class="ui black message">
+			<pre>
+- EXAMPLE -
+(
+	{
+	    "_status": 20,             //Numerical code that represent the status of the responses
+	    "_message": "Data found",  //Message of the status code response
+	    "_count": 1,               //Number of items found. 
+	    "data": [                  //Object that will contain the data found
+	        {
+	            "user": [          //Tittle of data 
+	                {
+	                    "firstName": "Derek B.", //data
+	                    "lastName": "Stewart",   //data
+	                    "username": "Stewart85", //data
+	                    "preference": "1",       //data
+	                    "businessId": null       //data
+	                }
+	            ]
+	        }
+	    ]
+	}
+)
+			</pre>
+		</div>
+
+
+		<h3 class="ui dividing header">
+			How to use example 
+		</h3>
+		Here is an example for movil application using ionic with AngularJS
+		<br>
+	<img src="img/e1.png"><br>
+	Result: <br>
+	<img src="img/e2.png">
+	<br>For more information about http request you can read the official docs in <a href="https://docs.angularjs.org/api/ng/service/$http">AngularJS</a> oficial site <a href="https://docs.angularjs.org/api/ng/service/$http">here</a>.
+	</div>
+</div>

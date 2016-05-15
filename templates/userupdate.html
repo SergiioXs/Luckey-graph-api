@@ -1,0 +1,78 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Update user";
+	var Metodo = "PUT";
+	var table = CodeTable(["22", "43", "44", "60"]);
+	var conditions = ConditionTable(["firstname", "lastname", "username", "id", "password", "preference", "_METHOD"]);
+	var Descripcion = "Updates the basic information of a previously created account, it must be confirmed by the user by using your password.<br><br>Here is a table of status code that the API could send.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"user/update/:id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+
+		var firstname 	  = $("#firstname").val();
+		var lastname 	  = $("#lastname").val();
+		var username 	  = $("#username").val();
+		var id     	      = $("#id").val();
+		var preference    = $("#drpdupdt").val();
+		var password      = $("#password").val();
+		var data          = "firstname="+firstname+"&lastname="+lastname+"&username="+username+"&preference="+preference+"&password="+password+"&_METHOD=PUT";
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"user/update/"+id, Metodo, data);
+		
+	});
+
+	$("#drpdupdt")
+	  .dropdown()
+	;
+
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>User ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>New first name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='firstname' type="text" placeholder="First Name">
+</div>
+<br><br>
+<label>New last name</label>
+<br>
+<input type="hidden" id='put' name="_METHOD" value="PUT"/>
+<div class="ui input" style="width: 95%;">
+  <input id='lastname' type="text" placeholder="Last Name">
+</div>
+<br><br>
+<label>New username</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='username' type="text" placeholder="Username">
+</div>
+<br><br>
+  <label>would you like to show your full name or username?</label>
+  <br>
+  <select class="ui dropdown" id='drpdupdt' style="width: 100%;">
+	  <option value="1">Full name</option>
+	  <option value="2">Username</option>
+  </select>
+  <br><br>
+  <label>Confirm with password</label>
+  <br>
+  <div class="ui input" style="width: 95%;">
+  	<input id='password' type="text" placeholder="Password">
+  </div>
+  <br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Save changes</button>
+

@@ -1,0 +1,33 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "User favorite business list";
+	var Metodo = "GET";
+	var table = CodeTable(["20", "30", "44", "60"]);
+	var conditions = ConditionTable(["id"]);
+	var Descripcion = "Retrieve the list of favorite businesses of an user. <br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"user/favoritelist";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var id = $("#id").val();
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL+"/"+id, Metodo, "");
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>User id</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User id" value="">
+</div>
+
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Get information</button>

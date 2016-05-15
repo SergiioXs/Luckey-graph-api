@@ -1,0 +1,290 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Create new business";
+	var Metodo = "POST";
+	var table = CodeTable(["21", "43", "44", "51", "60"]);
+	var conditions = ConditionTable(["id", "bname", "address", "phone", "password", "schedule"]);
+	var Descripcion = "A user can create a business, and set common business data as they are, name, address, phone, schedule. This information will be visible to all users.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"business/create";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var name 	  = $("#name").val();
+		var address   = $("#address").val();
+		var phone     = $("#phone").val();
+		var id     	  = $("#id").val();
+		var password = $("#password").val();
+		var schedule = '[';
+		for (var i = 1; i <= 7; i++) {
+			if(i==7) {
+				schedule += '{"open": '+($("#state"+i).val())+', "from": "'+($("#start"+i).val())+'", "to": "'+($("#end"+i).val())+'"}]';
+			} else {
+				schedule += '{"open": '+($("#state"+i).val())+', "from": "'+($("#start"+i).val())+'", "to": "'+($("#end"+i).val())+'"},';	
+			}
+		}
+		var data = "bname="+name+"&address="+address+"&phone="+phone+"&id="+id+"&schedule="+schedule+"&password="+password;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, data);
+	});
+
+	for (var a = 1; a <= 7; a++) {
+		$("#state"+a).val(false);
+	}
+
+
+	function status(x) {
+		
+		if($("#state"+x).val()){
+			$("#state"+x).val(false);
+			$("#state"+x).html("closed");	
+		} else {
+			$("#state"+x).val(true);
+			$("#state"+x).html("open");
+		}
+		
+	}
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>User id</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="number" placeholder="id" value="">
+</div>
+
+<br><br>
+<label>Business name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='name' type="text" placeholder="Business name">
+</div>
+<br><br>
+<label>Business address</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='address' type="text" placeholder="REFORMA 185, BAHIA, ENSENADA, C.P. 22880, BC.">
+</div>
+<br><br>
+<label>Business phone</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='phone' type="phone" placeholder="(646) 192-2565">
+</div>
+<br>
+<label>schedule</label>
+<br>
+
+
+
+<div class='ui segments'>
+	<div class="ui compact red segment" style="width: 100%;">
+		<label>Monday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(1);">
+		  <input type="checkbox" name="public" >
+		  <label id='state1'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start1' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end1' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui orange compact segment" style="width: 100%;">
+		<label>Thuesday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(2);">
+		  <input type="checkbox" name="public">
+		  <label id='state2' value='false'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start2' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end2' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui yellow compact segment" style="width: 100%;">
+		<label>Wednesday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(3);">
+		  <input type="checkbox" name="public">
+		  <label id='state3' value='false'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start3' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end3' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui olive compact segment" style="width: 100%;">
+		<label>Thrusday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(4);">
+		  <input type="checkbox" name="public">
+		  <label id='state4' value='false'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start4' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end4' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui green compact segment" style="width: 100%;">
+		<label>Friday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(5);">
+		  <input type="checkbox" name="public">
+		  <label id='state5' value='false'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start5' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end5' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui teal compact segment" style="width: 100%;">
+		<label>Saturday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(6);">
+		  <input type="checkbox" name="public">
+		  <label id='state6' value='false'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start6' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end6' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui blue compact segment" style="width: 100%;">
+		<label>Sunday</label>
+		<div class="ui toggle checkbox" style="float: right;" onClick="status(7);">
+		  <input type="checkbox" name="public">
+		  <label id='state7' value='false'>closed</label>
+		</div>
+		<br>
+		<div class='ui equal width center aligned padded grid' style="width: 100%;">
+			<div class="row">
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='start7' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div> 
+				</div>
+			  <div class="ui vertical divider">
+			    to
+			  </div>
+				<div class='column'>
+					<div class="ui icon input" style='width: 100%;'>
+					  <input id='end7' type="text" value='00:00:00'>
+					  <i class="clock icon"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br><br>
+<label>Confirm with password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="Password">
+</div>
+<br><br>
+<button class='ui blue button' style="width: 95%;" id='btn'>Create account</button>
+

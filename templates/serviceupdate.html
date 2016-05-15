@@ -1,0 +1,69 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Update service";
+	var Metodo = "PUT";
+	var table = CodeTable(["22", "43", "44", "46", "52", "60"]);
+	var conditions = ConditionTable(["id", "sid", "name", "description", "price", "password", "_METHOD"]);
+	var Descripcion = "Updates service.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"service/update/:id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var id          = $("#id").val();
+		var sid         = $("#sid").val();
+		var name        = $("#name").val();
+		var description = $("#description").val();
+		var price       = $("#price").val();
+		var password    = $("#password").val();
+		var data = "name="+name+"&description="+description+"&price="+price+"&id="+id+"&password="+password+"&id="+id+"&_METHOD=PUT";
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"service/update/"+sid, Metodo, data);
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>Owner of the business (User ID)</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>Service ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='sid' type="text" placeholder="Service ID">
+</div>
+<br><br>
+<label>New Name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='name' type="text" placeholder="Name">
+</div>
+<br><br>
+<label>New Description</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='description' type="text" placeholder="Description">
+</div>
+<br><br>
+<label>New Price</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='price' type="number" >
+</div>
+<br><br>
+
+<label>Password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="password">
+</div>
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Create service</button>
+

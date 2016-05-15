@@ -1,0 +1,54 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "User Login";
+	var Metodo = "GET";
+	var table = CodeTable(["20", "40", "41", "45", "60"]);
+	var conditions = ConditionTable(["role", "email", "password"]);
+	var Descripcion = "Verify a user's account through your mail, password and role. If in case the choose role is the user with value 1, then the API will return a JSON with user data, otherwise, in case of choose the locksmith role with value 2, the API will return a JSON with business data. <br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"user/login";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var email = $("#email").val();
+		var password = $("#password").val();
+		var role = $("#dropdown option:selected").val();
+		var data = "email="+email+"&password="+password+"&role="+role;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, data);
+	});
+	$("#dropdown")
+      .dropdown()
+    ;
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>Role</label>
+<br>
+<select class="ui dropdown" id='dropdown' style='width: 95%;'>
+  <option value="">Select your role</option>
+  <option value="1">User</option>
+  <option value="2">Locksmith</option>
+</select>
+<br><br>
+<label>Email</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='email' type="text" placeholder="Email" value="">
+</div>
+
+<br><br>
+<label>Password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="Password" value="">
+</div>
+
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Log in</button>

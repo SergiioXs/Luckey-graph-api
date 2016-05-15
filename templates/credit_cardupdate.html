@@ -1,0 +1,91 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Update credit card";
+	var Metodo = "PUT";
+	var table = CodeTable(["22", "43", "44", "48", "49", "60"]);
+	var conditions = ConditionTable(["id", "password", "ccid", "name", "number", "cvc", "cp", "date"]);
+	var Descripcion = "Modifies the information of an existing credit card.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"credit_card/update/:id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+
+		var name 	  = $("#name").val();
+		var date 	  = $("#date").val();
+		var cvc 	  = $("#cvc").val();
+		var id     	  = $("#id").val();
+		var number    = $("#number").val();
+		var cp        = $("#cp").val();		
+		var ccid      = $("#ccid").val();
+		var password  = $("#password").val();
+		var data      = "name="+name+"&date="+date+"&cvc="+cvc+"&number="+number+"&cp="+cp+"&password="+password+"&id="+id+"&_METHOD=PUT";
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"credit_card/update/"+ccid, Metodo, data);
+
+
+
+
+	});
+
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>User ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>Credit card ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='ccid' type="text" placeholder="Credit card ID">
+</div>
+<br><br>
+<label>New name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='name' type="text" placeholder="Name">
+</div>
+<br><br>
+<label>New number</label>
+<br>
+<input type="hidden" id='put' name="_METHOD" value="PUT"/>
+<div class="ui input" style="width: 95%;">
+  <input id='number' type="text" placeholder="0000000000000000">
+</div>
+<br><br>
+<label>New date</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='date' type="text" placeholder="MM/YY">
+</div>
+<br><br>
+<label>New CVC</label>
+<br>
+<input type="hidden" id='put' name="_METHOD" value="PUT"/>
+<div class="ui input" style="width: 95%;">
+  <input id='cvc' type="text" placeholder="393">
+</div>
+<br><br>
+  <label>New postal code</label>
+  <br>
+  <div class="ui input" style="width: 95%;">
+  	<input id='cp' type="text" placeholder="22890">
+  </div>
+  <br><br>
+  <label>Confirm with password</label>
+  <br>
+  <div class="ui input" style="width: 95%;">
+  	<input id='password' type="text" placeholder="Password">
+  </div>
+  <br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Save changes</button>
+

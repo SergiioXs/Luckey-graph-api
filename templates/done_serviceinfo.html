@@ -1,0 +1,37 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Done service information";
+	var Metodo = "GET";
+	var Descripcion = "Returns all basic information of a certain done service specified by the id. In case if the done service exists the following data will be inside the Array 'data': Array 'doneService' [id, date, rate, comment, serviceId, CrediCardId] <br><br>To see an example for this function, try using the Form situated inside of the input section. <br><br>There is a condition for the function.<table class='ui table'><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td>ID</td><td>The done service id must be only a positive entire number.</td></tr></tbody></table>";
+	var URL = dominio+"done_service/:id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var id = $("#id").val();
+		if(id == ""){
+			id = 0;
+		}
+
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"done_service/"+id, Metodo, id);
+
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="Done service ID">
+</div>
+
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Get information</button>

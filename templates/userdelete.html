@@ -1,0 +1,45 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Delete user";
+	var Metodo = "POST";
+	var table = CodeTable(["23", "43", "44", "60"]);
+	var conditions = ConditionTable(["id", "password"]);
+	var Descripcion = "Removes an existing account. If the account is deleted, all the user information including credit cards will be removed. If the user has a business, will be removed and will be removed  from other user's favorite business<br><br>"+exampleMessage+"<br><br>Here is a table of status code that the API could send."+table+"There is a few conditions: "+conditions;
+	var URL = dominio+"user/delete/:id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var id = $("#id").val();
+		var password = $("#password").val();
+		data = "password="+password;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"user/delete/"+id, Metodo, data);
+		
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>User ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User id" value="">
+</div>
+
+<br><br>
+
+<label>Password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="Password" value="">
+</div>
+
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Delete user</button>

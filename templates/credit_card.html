@@ -1,0 +1,26 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Show all credit cards";
+	var Metodo = "GET";
+	var Descripcion = "This function is only temporary for programing phase, and it will return all credit cards registered in the database, every credit card will have the following data: id, name, number, date, cvc, postalCode.<br><br>To see an example, try clicking the button inside the Input section, it will run an ajax with the URI.";
+	var URL = dominio+"credit_card/";
+
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, "");
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<button class='ui teal button' style="width: 95%;" id='btn'>Show all credit cards</button>
+

@@ -1,0 +1,46 @@
+<script type="text/javascript">
+var Titulo = "The API root";
+	var Metodo = "GET";
+	var Descripcion = "The LAPI have a root access for consumers. This not return any data to the client, but a welcome to the API.";
+	var URL = dominio;
+
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+	var data = "";
+	$("#testbtn").on('click', function () {
+        $("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+        var data = "";
+        var url = dominio;
+        $.ajax({
+            type: Metodo,
+            url: URL,
+            data:  data,
+            complete: function(result){
+                $("#log").html(ConsoleLog(result, data, url));
+            },
+            success: function(result, xhr) {
+                if(result != "0" && result.length < 30){
+                    $("#output").html("\n   <i class='checkmark green icon'></i>"+result);
+                } else {
+                    $("#output").html("\n   <i class='remove red icon'></i>Woops! There is a problem with the API. Please try again later.<br>");
+                    
+                }
+
+            },
+            error: function(error) {
+                $("#output").html("\n   <i class='remove red icon'></i>Woops! There is a problem with the API. Please try again later.");
+                $("#respond").html(error);
+            }
+        });
+    });
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<center>
+	<button class='ui teal huge button' id='testbtn'>Test API</button>
+</center>

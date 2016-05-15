@@ -1,0 +1,93 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Create new done service";
+	var Metodo = "POST";
+    var table = CodeTable(["21", "48", "44", "52", "60"]);
+    var conditions = ConditionTable(["ccid", "sid", "rate", "comment", "rate", "fulldate"]);
+	var Descripcion = "Create new done service.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"done_service/create";
+	$('#rate')
+	  .rating()
+	;
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var ccid         = $("#ccid").val();
+		var sid          = $("#sid").val();
+		var rate         = $("#rate").val();
+		var comment      = $("#comment").val();
+		var date         = $("#date").val();
+		var data         = "ccid="+ccid+"&sid="+sid+"&comment="+comment+"&fulldate="+date+"&rate="+rate;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, data);
+		
+	});
+
+
+    var d = new Date();
+    Month = d.getMonth(); 
+    if(Month < 10)
+    	Month = "0"+Month;
+    Day = d.getDay(); 
+    if(Day < 10)
+    	Day = "0"+Day;
+    Hours = d.getHours(); 
+    if(Hours < 10)
+    	Hours = "0"+Hours;
+    Minutes = d.getMinutes(); 
+    if(Minutes < 10)
+    	Minutes = "0"+Minutes;
+    Seconds = d.getSeconds(); 
+    if(Seconds < 10)
+    	Seconds = "0"+Seconds;
+    date = d.getFullYear()+"-"+Month+"-"+Day+" "+Hours+":"+Minutes+":"+Seconds;
+    $("#date").val(date);
+
+    $("#rate").val(0);
+
+    $("#rate").on('click', function () {
+    	if($("#rate").val() == 0)
+    		$("#rate").val("1");
+    	else 
+    		$("#rate").val("0");
+    });
+
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>Service ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='sid' type="text" placeholder="Service ID">
+</div>
+<br><br>
+<label>Credit card ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='ccid' type="text" placeholder="Credit card ID">
+</div>
+<div class="ui divider"></div>
+<label>Date</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='date' type="text" placeholder="" value="">
+</div>
+<br><br>
+<label>Comment</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='comment' type="text" placeholder="Make a commment">
+</div>
+<br><br>
+<label>Does the locksmith deserves the star? (Rate)</label>
+<br><br>
+<center><div class="ui massive star rating" id='rate' data-rating="0" data-max-rating="1" value="1"></div></center>
+<br>
+<button class='ui blue button' style="width: 95%;" id='btn'>Create service</button>
+

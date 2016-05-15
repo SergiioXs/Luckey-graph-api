@@ -1,0 +1,70 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Update locksmith position";
+	var Metodo = "POST";
+	var table = CodeTable(["22", "40", "44", "46"]);
+	var conditions = ConditionTable(["id"]);
+	var Descripcion = "Update the current locksmith position. <br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"business/position/:id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		latitude = $("#latitude").val();
+		longitude = $("#longitude").val();
+		var id = $("#id").val();
+		var data = "id="+id+"&latitude="+latitude+"&longitude="+longitude+"&_METHOD=PUT";	
+		
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"business/position/"+id, Metodo, data);
+	});
+$("#coords").on("click", function () {
+	navigator.geolocation.getCurrentPosition(success, error, options);
+});
+
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(posistion) {
+  var crd = pos.coords;
+  console.log(position);
+  $("#latitude").html(position.coords.latitude); 
+  $("#longitude").html(position.coords.longitude); 
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+
+
+
+
+
+function showPosition(position) {
+   
+}
+</script>
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>User id</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User id" value="">
+</div>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='latitude' type="text" placeholder="Latitude" value="">
+</div>
+<div class="ui input" style="width: 95%;">
+  <input id='longitude' type="text" placeholder="Longitude" value="">
+</div>
+<br><br>
+
+<button class='ui teal button' style="width: 95%;" id='btn'>Update information</button>

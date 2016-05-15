@@ -1,0 +1,62 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Create new service";
+	var Metodo = "POST";
+	var table = CodeTable(["21", "43", "44", "46", "60"]);
+	var conditions = ConditionTable(["id", "name", "description", "price", "password"]);
+	var Descripcion = "Create new service.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"service/create";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var id          = $("#id").val();
+		var name        = $("#name").val();
+		var description = $("#description").val();
+		var price       = $("#price").val();
+		var password    = $("#password").val();
+		var data        = "name="+name+"&description="+description+"&price="+price+"&id="+id+"&password="+password;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, data);
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>Owner of the business (User ID)</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>Name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='name' type="text" placeholder="Name">
+</div>
+<br><br>
+<label>Description</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='description' type="text" placeholder="Description">
+</div>
+<br><br>
+<label>Price</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='price' type="number" >
+</div>
+<br><br>
+
+<label>Password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="password">
+</div>
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Create service</button>
+

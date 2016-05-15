@@ -1,0 +1,77 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Create credit card";
+	var Metodo = "POST";
+	var table = CodeTable(["21", "44", "50", "60"]);
+	var conditions = ConditionTable(["id", "name", "number", "cvc", "cp", "date"]);
+	var Descripcion = "Users can save information from their credit cards to do more faster the payment mode.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"credit_card/create";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+
+		var name 	  = $("#name").val();
+		var number    = $("#number").val();
+		var date      = $("#date").val();
+		var cvc       = $("#cvc").val();
+		var cp        = $("#cp").val();
+		var id     	  = $("#id").val();
+		var date      = date.split(/-/);   
+            date      = date[1]+"/"+(date[0].substr(2, 2));
+        var data      = "name="+name+"&number="+number+"&date="+date+"&cvc="+cvc+"&cp="+cp+"&id="+id;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, data);
+
+	});
+
+
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>User id</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="number" placeholder="id" value="">
+</div>
+
+<br><br>
+<label>Credit card name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='name' type="text" placeholder="Name">
+</div>
+<br><br>
+<label>Number</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='number' type="text" placeholder="0000000000000000">
+</div>
+<br><br>
+<label>date</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='date' type="date" placeholder="dd/mm/yy" >
+</div>
+<br><br>
+<label>cvc</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='cvc' type="number" limit='3' placeholder="393">
+</div>
+
+<br><br>
+<label>Postal code</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='cp' type="number" placeholder="22890">
+</div>
+
+<br><br>
+<button class='ui blue button' style="width: 95%;" id='btn'>Create credit card</button>
+

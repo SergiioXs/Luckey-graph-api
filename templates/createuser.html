@@ -1,0 +1,63 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Create new account";
+	var Metodo = "POST";
+	var table = CodeTable(["21", "42", "60"]);
+	var conditions = ConditionTable(["firstname", "lastname", "email", "username", "password"]);
+	var Descripcion = "Create a new user account, verifying that the email is not repeated.<br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"user/create";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var firstname = $("#firstname").val();
+		var lastname  = $("#lastname").val();
+		var email     = $("#email").val();
+		var username  = $("#username").val();
+		var password  = $("#password").val();
+		var data = "firstname="+firstname+"&lastname="+lastname+"&email="+email+"&username="+username+"&password="+password;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+
+		AJAX(URL, Metodo, data);
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>First name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='firstname' type="text" placeholder="Steve Jhon">
+</div>
+<br><br>
+<label>Last name</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='lastname' type="text" placeholder="Lopez Perez">
+</div>
+<br><br>
+<label>Email</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='email' type="email" placeholder="Steve23n@gmail.com">
+</div>
+<br><br>
+<label>Username</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='username' type="text" placeholder="Username">
+</div>
+<br><br>
+<label>Password</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="password">
+</div>
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Create account</button>
+
