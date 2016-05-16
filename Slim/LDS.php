@@ -27,7 +27,7 @@ $vDescription = "/^[a-zA-Z0-9áéíóúñ\_\.\,\-\/\*\+\%\(\)\@ ]+$/"; // letter
 $vComment     = "/^[ a-zA-Z0-9\_\.\,\-\/\*\+\%\(\)\@]{8,64}$/"; // letters . , - / * + % ( )
 $vPrice       = "/^[0-9]+([\.]{1}[0-9]+)?$/"; // Pendiente
 $vPreference  = "/^(1|2)$/";
-$vCoord       = "/^(-)?[0-9]+([\.]{1}[0-9]+)?$/";
+$vCoords       = "/^(-)?[0-9]+([\.]{1}[0-9]+)?$/";
 
 //Obtenemos todos los valores de una tabla
  function getAllData($table){
