@@ -51,6 +51,9 @@ $(document).ready( function () {
         {parameter:"Service id", name:"sid", description:"The service id must be only a positive entire number. It is extremely important that the service ID is entered, otherwise the http server response could be error 404 (not found)"},
         {parameter:"Done sevice id", name:"dsid", description:"The done service id must be only a positive entire number. It is extremely important that the done service ID is entered, otherwise the http server response could be error 404 (not found)"},
         {parameter:"Method for update", name:"_METHOD", description:"The value MUST be PUT"},
+        {parameter:"Latitude",  name:"lat", description:"Only entire or decimal, positive or negative, numbers are allowed"},
+        {parameter:"Longitude", name:"lng", description:"Only entire or decimal, positive or negative, numbers are allowed"},
+        {parameter:"Kilometer", name:"km",  description:"Only positive entire numbers are allowed"}
     ];
 
     exampleMessage = "To see an example for this function, try using the Form situated inside of the input section. ";
