@@ -17,6 +17,88 @@ $app->group('/business', function() use($db,$app){
             echo sendJSON(30, null, null);
         }
     });
+    //Change position
+    $app->put('/update/position/:id', function($id) use($db,$app){
+        global $vId, $vCoord;
+        $R    = $app->request;
+        $uid  = validate($vId, $id);
+        $long = validate($vCoord, $R->post('longitude'));
+        $lat  = validate($vCoord, $R->post('latitude'));
+        if($uid && $long && $lat){
+            try {
+                $user = getData("SELECT fk_business_id FROM user WHERE user_id = $uid");
+                if(rowCount($user)){
+                        if($user[0]['fk_business_id']){
+                            try {
+                                SQL("UPDATE business
+                                        SET longitude = $long,
+                                            latitude  = $lat
+                                        WHERE business_id = ".$user[0]['fk_business_id']
+                                    );
+                                echo sendJSON(22, null, null);
+                            } catch (Exception $e) {
+                                echo sendJSON(40, null, null);
+                            }
+                        } else {
+                            echo sendJSON(46, null, null); 
+                        }
+                } else {
+                    echo sendJSON(44, null, null);
+                }
+            } catch (Exception $e) {
+               echo sendJSON(40, null, null); 
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
+
+    //all locations
+    $app->get('/geolocation/all', function() use($db,$app){
+        try {
+            $r = getData("SELECT business_id AS id, business_name AS name, latitude, longitude FROM business");
+            if(rowCount($r)){
+            	echo sendJSON(20, "list", $r);
+            } else {
+                echo sendJSON(30, null, null);
+            }
+        } catch (Exception $e) {
+           echo sendJSON(40, null, null); 
+        }
+});
+
+      //near to me
+$app->get('/geolocation/near', function() use($db,$app){
+    global $vCoords, $vId;
+    $R   = $app->request;
+    $lat = validate($vCoords, $R ->get("lat"));
+    $lng = validate($vCoords, $R ->get("lng"));
+    $km  = validate($vId, $R ->get("km"));
+    if($lat && $lng && $km){
+	    try {
+	    	$r = getData("SELECT business_id AS id, business_name AS name, latitude, longitude,  
+	    					(6371 * ACOS( 
+                                SIN(RADIANS(latitude)) * SIN(RADIANS($lat)) 
+                                + COS(RADIANS(longitude - $lng)) * COS(RADIANS(latitude)) 
+                                * COS(RADIANS($lat))
+                                )
+                  			) AS distance
+							FROM business
+							HAVING distance < $km /* 1 KM  a la redonda */
+							ORDER BY distance ASC");
+	        if(rowCount($r)){
+	        	echo sendJSON(20, "list", $r);
+	        } else {
+	            echo sendJSON(30, null, null);
+	        }
+	    } catch (Exception $e) {
+	       echo sendJSON(40, null, null); 
+	    }
+	} else {
+		echo sendJSON(60, null, null);
+	}
+});
+
 
 //Describe a business by his ID
     $app->get('/:id', function($id) use($db,$app){
@@ -203,41 +285,7 @@ $app->group('/business', function() use($db,$app){
     });
 
 
-    //Change position
-    $app->put('/position/:id', function($id) use($db,$app){
-        global $vId, $vCoord;
-        $R    = $app->request;
-        $uid  = validate($vId, $id);
-        $long = validate($vCoord, $R->post('longitude'));
-        $lat  = validate($vCoord, $R->post('latitude'));
-        if($uid && $long && $lat){
-            try {
-                $user = getData("SELECT fk_business_id FROM user WHERE user_id = $uid");
-                if(rowCount($user)){
-                        if($user[0]['fk_business_id']){
-                            try {
-                                SQL("UPDATE business
-                                        SET Longitude = $long,
-                                            Latitude  = $lat
-                                        WHERE business_id = ".$user[0]['fk_business_id']
-                                    );
-                                echo sendJSON(22, null, null);
-                            } catch (Exception $e) {
-                                echo sendJSON(40, null, null);
-                            }
-                        } else {
-                            echo sendJSON(46, null, null); 
-                        }
-                } else {
-                    echo sendJSON(44, null, null);
-                }
-            } catch (Exception $e) {
-               echo sendJSON(40, null, null); 
-            }
-        } else {
-            echo sendJSON(60, null, null);
-        }
-    });
+
 
 
 
