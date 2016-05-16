@@ -3,9 +3,9 @@
 	var Titulo = "Update locksmith position";
 	var Metodo = "POST";
 	var table = CodeTable(["22", "40", "44", "46"]);
-	var conditions = ConditionTable(["id"]);
+	var conditions = ConditionTable(["id", "lat", "lng"]);
 	var Descripcion = "Update the current locksmith position. <br><br>"+exampleMessage+""+table+""+conditions;
-	var URL = dominio+"business/position/:id";
+	var URL = dominio+"business/update/position/:id";
 
 /* T E M P L A T E */ 
 	$("#Titulo").html(Titulo);
@@ -18,7 +18,7 @@
 		latitude = $("#latitude").val();
 		longitude = $("#longitude").val();
 		var id = $("#id").val();
-		var data = "id="+id+"&latitude="+latitude+"&longitude="+longitude+"&_METHOD=PUT";	
+		var data = "id="+id+"&lat="+latitude+"&lng="+longitude+"&_METHOD=PUT";	
 		
 		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
 		AJAX(dominio+"business/position/"+id, Metodo, data);
@@ -58,10 +58,15 @@ function showPosition(position) {
 <div class="ui input" style="width: 95%;">
   <input id='id' type="text" placeholder="User id" value="">
 </div>
+<br><br>
+<label>Latitude</label>
 <br>
 <div class="ui input" style="width: 95%;">
   <input id='latitude' type="text" placeholder="Latitude" value="">
 </div>
+<br><br>
+<label>Longitude</label>
+<br>
 <div class="ui input" style="width: 95%;">
   <input id='longitude' type="text" placeholder="Longitude" value="">
 </div>
