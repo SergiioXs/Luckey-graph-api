@@ -85,6 +85,9 @@ function getStatusMSG($code) {
         case 30:
             $msg = "No data found";
             break;
+        case 31:
+            $msg = "This business is already in your favorite list";
+            break;
         case 40:
             $msg = "Invalid data";
             break;
@@ -99,6 +102,9 @@ function getStatusMSG($code) {
             break;
         case 44:
             $msg = "User doesn’t exists.";
+            break;
+        case 45:
+            $msg = "Business doesn’t exists.";
             break;
         case 46:
             $msg = "The user doesn’t have a business.";
