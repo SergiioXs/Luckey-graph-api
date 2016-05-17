@@ -5,7 +5,7 @@ $app->group('/business', function() use($db,$app){
 
 //Obtener todos los negocios
     $app->get('/', function() use($db,$app){
-       $rows = getData("SELECT business_id AS id, business_name AS name, business_address AS address, business_phone AS phone, business_schedule AS schedule FROM business");
+       $rows = getData("SELECT business_id AS id, business_name AS name, business_address AS address, business_phone AS phone, latitude, longitude, business_schedule AS schedule FROM business");
        
         for($i=0;$i < rowCount($rows); $i++){
             $rows[$i]['schedule'] = json_decode($rows[$i]['schedule']); 
@@ -22,8 +22,8 @@ $app->group('/business', function() use($db,$app){
         global $vId, $vCoord;
         $R    = $app->request;
         $uid  = validate($vId, $id);
-        $long = validate($vCoord, $R->post('longitude'));
-        $lat  = validate($vCoord, $R->post('latitude'));
+        $long = validate($vCoord, $R->post('lng'));
+        $lat  = validate($vCoord, $R->post('lat'));
         if($uid && $long && $lat){
             try {
                 $user = getData("SELECT fk_business_id FROM user WHERE user_id = $uid");
@@ -106,7 +106,7 @@ $app->get('/geolocation/near', function() use($db,$app){
         $uid = validate($vId, $id);
         if($uid){
             try {
-                $rows = getData("SELECT business_name AS name, business_address AS address, business_phone AS phone, business_schedule AS schedule
+                $rows = getData("SELECT business_name AS name, business_address AS address, business_phone AS phone, latitude, longitude, business_schedule AS schedule
                                  FROM business 
                                  WHERE business_id = $id");
                 if(rowCount($rows)){
@@ -285,6 +285,38 @@ $app->get('/geolocation/near', function() use($db,$app){
     });
 
 
+    //Describe a business by his ID
+    $app->post('/add_to_favorite/:bid', function($bid) use($db,$app){
+        global $vId;
+        $R   = $app->request;
+        $bid = validate($vId, $bid);
+        $uid = validate($vId, $R->post("id"));
+        if($uid && $bid){
+            try {
+                $rows = getData("SELECT user_id FROM user WHERE user_id = $uid");
+                if(rowCount($rows)){
+                	$ebus = getData("SELECT business_id FROM business WHERE business_id = $bid");
+                	if(rowCount($ebus)){
+	                	$exist = getData("SELECT fk_user_id FROM user_has_favorite WHERE fk_business_id = $bid && fk_user_id = $uid");
+		                if(!rowCount($exist)){
+		                    SQL("INSERT INTO user_has_favorite(fk_user_id, fk_business_id) VALUES($uid, $bid);");
+		                    echo sendJSON(22, null, null);    
+	                	} else {
+	                		echo sendJSON(31, null, null);
+	                	}
+	                } else {
+	                	echo sendJSON(45, null, null);
+	                }
+                } else {
+                    echo sendJSON(44, null, null);
+                }              
+            } catch (Exception $e) {
+               echo sendJSON(40, null, null); 
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
 
 
 
