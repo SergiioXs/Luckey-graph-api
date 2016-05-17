@@ -1,0 +1,83 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB67zWhn7gbvnwDOHoD6wUYWVEg_POP8gg"
+    async defer></script>
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Map of all business";
+	var Metodo = "GET";
+	var Descripcion = "This function is only to see where are situated all the business. Show a map with all business positions. Click in the red marks to see the name of the business. ";
+	var URL = dominio+"business/geolocation/all";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var data = "";
+		
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		$.ajax({
+		  method: "GET",
+		  url: URL,
+		  data: "",
+			success: function(response) {
+				obj = eval(response);
+				business = [];
+				for (var i = 1; i <= obj._count; i++) {
+					business[i] = [obj.data[0].list[i-1].name, obj.data[0].list[i-1].latitude, obj.data[0].list[i-1].longitude]; 
+				}
+				$("#output").html("<div id='map_canvas' style='width: 100%; height: 400px;'></div>");
+				initializeMaps(business);
+			}
+		});
+	});
+function initializeMaps(business) {
+	$.ajax({
+		  method: "POST",
+		  url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAwHVWvL7zZou6jj40IN9RbxXFn087kdUg",
+		  data: "",
+			success: function(response) {
+				lat = response.location.lat+0.0041078;
+				lng = response.location.lng-0.0034313;
+				business[0] = ["I'm here!", lat, lng];
+				var latlng = new google.maps.LatLng(lat, lng);
+			    var myOptions = {
+			        zoom: 14,
+			        center: latlng,
+			        mapTypeId: google.maps.MapTypeId.ROADMAP,
+			        mapTypeControl: false
+			    };
+
+			    var map = new google.maps.Map(document.getElementById("map_canvas"),myOptions); 
+			    var infowindow = new google.maps.InfoWindow(), marker, i;
+				
+				for (i = 0; i < business.length; i++) { 
+					if(i == 0){
+						icon = "../img/man.png";
+					}  else {
+						icon = "../img/keymark.png";
+					}
+				    marker = new google.maps.Marker({
+				    	icon: icon,
+				        position: new google.maps.LatLng(business[i][1], business[i][2]),
+				        map: map
+				    });
+
+				    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				        return function() {
+				            infowindow.setContent(business[i][0]);
+				            infowindow.open(map, marker);
+				        }
+				    })(marker, i));
+				}
+			}
+		});
+    
+}
+
+</script>
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<button class='ui teal button' style="width: 95%;" id='btn'>Show map</button>

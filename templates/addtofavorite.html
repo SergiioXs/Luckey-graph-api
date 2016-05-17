@@ -1,0 +1,43 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Add to my business favorite list";
+	var Metodo = "POST";
+	var table = CodeTable(["22", "31", "44", "45", "40", "60"]);
+	var conditions = ConditionTable(["id", "bid"]);
+	var Descripcion = "Add a business to your business favotrite list. <br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"business/add_to_favorite/:BusinessId";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var id = $("#id").val();
+		var bid = $("#bid").val();
+		var data = "id="+id;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"business/add_to_favorite/"+bid, Metodo, data);
+	});
+
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>User ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="user id" value="">
+</div>
+
+<br><br>
+<label>Business ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='bid' type="text" placeholder="Business id" value="">
+</div>
+
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Add to my favorite list</button>
