@@ -19,11 +19,11 @@ $app->group('/business', function() use($db,$app){
     });
     //Change position
     $app->put('/update/position/:id', function($id) use($db,$app){
-        global $vId, $vCoord;
+        global $vId, $vCoords;
         $R    = $app->request;
         $uid  = validate($vId, $id);
-        $long = validate($vCoord, $R->post('lng'));
-        $lat  = validate($vCoord, $R->post('lat'));
+        $long = validate($vCoords, $R->post('lng'));
+        $lat  = validate($vCoords, $R->post('lat'));
         if($uid && $long && $lat){
             try {
                 $user = getData("SELECT fk_business_id FROM user WHERE user_id = $uid");

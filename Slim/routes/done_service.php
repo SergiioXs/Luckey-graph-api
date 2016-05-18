@@ -36,9 +36,8 @@ $app->group('/done_service', function() use($db,$app){
            $ccid    = validate($vId, $R->post('ccid')); 
            $sid     = validate($vId, $R->post('sid')); 
            $rate    = validate($vRate, $R->post('rate')); 
-           $comment = validate($vComment, trim($R->post('comment'))); 
-           $date    = validate($vFullDate, $R->post('date')); 
-
+           $comment = validate($vComment, $R->post('comment')); 
+           $date    = validate($vFullDate, $R->post('fulldate')); 
         if($ccid && $sid && $rate && $comment && $date){
             try {
 
@@ -54,7 +53,6 @@ $app->group('/done_service', function() use($db,$app){
                                      $sid,
                                      $ccid
                                 )
-
                             ");
                         echo sendJSON(21, null, null);
                     } else {
