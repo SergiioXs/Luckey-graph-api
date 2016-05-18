@@ -18,10 +18,10 @@
 		latitude = $("#latitude").val();
 		longitude = $("#longitude").val();
 		var id = $("#id").val();
-		var data = "id="+id+"&lat="+latitude+"&lng="+longitude+"&_METHOD=PUT";	
+		var data = "lat="+latitude+"&lng="+longitude+"&_METHOD=PUT";	
 		
 		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
-		AJAX(dominio+"business/position/"+id, Metodo, data);
+		AJAX(dominio+"business/update/position/"+id, Metodo, data);
 	});
 
 	$("#getpostbtn").on('click', function() {
