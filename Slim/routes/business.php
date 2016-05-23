@@ -22,8 +22,8 @@ $app->group('/business', function() use($db,$app){
         global $vId, $vCoords;
         $R    = $app->request;
         $uid  = validate($vId, $id);
-        $long = validate($vCoords, $R->post('lng'));
-        $lat  = validate($vCoords, $R->post('lat'));
+        $long = validate($vCoords, $R->params('lng'));
+        $lat  = validate($vCoords, $R->params('lat'));
         if($uid && $long && $lat){
             try {
                 $user = getData("SELECT fk_business_id FROM user WHERE user_id = $uid");
@@ -129,12 +129,12 @@ $app->get('/geolocation/near', function() use($db,$app){
     $app->post('/create', function() use($db,$app){
         global $vBusinessName, $vAddress, $vPhone, $vSchedule, $vId; 
         $R         = $app->request;
-        $name      = validate($vBusinessName, $R->post('bname')); 
-        $address   = validate($vAddress,      $R->post('address'));  
-        $phone     = validate($vPhone,        $R->post('phone'));     
-        $schedule  = $R->post('schedule');
-        $userid    = validate($vId,           $R->post('id'));
-        $password  = sha1($R->post('password'));
+        $name      = validate($vBusinessName, $R->params('bname')); 
+        $address   = validate($vAddress,      $R->params('address'));  
+        $phone     = validate($vPhone,        $R->params('phone'));     
+        $schedule  = $R->params('schedule');
+        $userid    = validate($vId,           $R->params('id'));
+        $password  = sha1($R->params('password'));
         if($name && $address && $phone && $userid){
             if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $userid "))) {
                 if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $userid AND user_password = '$password'"))) {
@@ -177,11 +177,11 @@ $app->get('/geolocation/near', function() use($db,$app){
     $app->put('/update/:id', function($id) use($db,$app){
         global $vFullName, $vAddress, $vPhone, $vSchedule;
         $R         = $app->request;
-        $name      = validate($vFullName, $R->post('name')); //Solo letras
-        $address   = validate($vAddress, $R->post('address'));  //Solo letras
-        $phone     = validate($vPhone, $R->post('phone'));     //
-        $schedule  = $R->post('schedule');
-        $password  = sha1($R->post('password'));
+        $name      = validate($vFullName, $R->params('name')); //Solo letras
+        $address   = validate($vAddress, $R->params('address'));  //Solo letras
+        $phone     = validate($vPhone, $R->params('phone'));     //
+        $schedule  = $R->params('schedule');
+        $password  = sha1($R->params('password'));
 
         if($name && $phone && $address){
             // If exist user
@@ -223,7 +223,7 @@ $app->get('/geolocation/near', function() use($db,$app){
     $app->post('/delete/:id', function($id) use($db,$app){
         global $vId;
         $R           = $app->request;
-        $password    = sha1($R->post('password')); //Solo letras
+        $password    = sha1($R->params('password')); //Solo letras
         $uid         = validate($vId, $id);
 
         if($uid){
@@ -290,7 +290,7 @@ $app->get('/geolocation/near', function() use($db,$app){
         global $vId;
         $R   = $app->request;
         $bid = validate($vId, $bid);
-        $uid = validate($vId, $R->post("id"));
+        $uid = validate($vId, $R->params("id"));
         if($uid && $bid){
             try {
                 $rows = getData("SELECT user_id FROM user WHERE user_id = $uid");

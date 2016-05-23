@@ -14,9 +14,9 @@ $app->group('/user', function() use($db,$app){
     $app->get('/login', function() use($db,$app){
         global $vEmail, $vRole;
         $R        = $app->request;
-        $email    = validate($vEmail, $R->get('email')); 
-        $password = sha1($R->get('password')); 
-        $role     = validate($vRole, $R->get('role'));
+        $email    = validate($vEmail, $R->params('email')); 
+        $password = sha1($R->params('password')); 
+        $role     = validate($vRole, $R->params('role'));
 
         if($email && $role){
             try {
@@ -78,14 +78,14 @@ $app->group('/user', function() use($db,$app){
 
 //Create a new user
     $app->post('/create', function() use($db,$app){
-    global $vFirstName, $vLastName, $vEmail, $vPassword, $vUsername;
+        global $vFirstName, $vLastName, $vEmail, $vPassword, $vUsername;
            $R         = $app->request;
-           $firstname = validate($vFirstName,$R->post('firstname')); 
-           $lastname  = validate($vLastName, $R->post('lastname'));  
-           $email     = validate($vEmail,    $R->post('email'));     
-           $password  = validate($vPassword, $R->post('password'));
-           $username  = validate($vUsername, $R->post('username')); 
-
+           $firstname = validate($vFirstName,$R->params('firstname')); 
+           $lastname  = validate($vLastName, $R->params('lastname'));  
+           $email     = validate($vEmail,    $R->params('email'));     
+           $password  = validate($vPassword, $R->params('password'));
+           $username  = validate($vUsername, $R->params('username')); 
+           
         if($firstname && $lastname && $email && $password && $username){
             $password = sha1($password);
             try {
@@ -120,11 +120,11 @@ $app->group('/user', function() use($db,$app){
     $app->put('/update/:id', function($id) use($db,$app){
         global $vFirstName, $vLastName, $vUsername, $vPreference, $vPassword, $vId; 
         $R           = $app->request;
-        $firstname   = validate($vFirstName,  $R->post('firstname')); //Solo letras
-        $lastname    = validate($vLastName,   $R->post('lastname'));  //Solo letras
-        $username    = validate($vUsername,   $R->post('username'));     //
-        $preference  = validate($vPreference, $R->post('preference'));
-        $password    = validate($vPassword,   $R->post('password'));
+        $firstname   = validate($vFirstName,  $R->params('firstname')); //Solo letras
+        $lastname    = validate($vLastName,   $R->params('lastname'));  //Solo letras
+        $username    = validate($vUsername,   $R->params('username'));     //
+        $preference  = validate($vPreference, $R->params('preference'));
+        $password    = validate($vPassword,   $R->params('password'));
         $uid         = validate($vId, $id);
 
         if($firstname && $lastname && $username && $preference && $password && $uid){
@@ -169,8 +169,8 @@ $app->group('/user', function() use($db,$app){
     $app->put('/update/password/:id', function($id) use($db,$app){
         global $vId, $vPassword;
         $R           = $app->request;
-        $newpassword = validate($vPassword, $R->post('newpassword'));
-        $password    = $R->post('password');
+        $newpassword = validate($vPassword, $R->params('newpassword'));
+        $password    = $R->params('password');
         $uid         = validate($vId, $id); 
         
         if($newpassword && $uid){
@@ -210,7 +210,7 @@ $app->group('/user', function() use($db,$app){
     $app->post('/delete/:id', function($id) use($db,$app){
         global $vId, $vPassword;
         $R           = $app->request;
-        $password    = validate($vPassword, $R->post('password')); //Solo letras
+        $password    = validate($vPassword, $R->params('password')); //Solo letras
         $uid         = validate($vId, $id);
 
         if($uid && $password) {
@@ -278,7 +278,7 @@ $app->group('/user', function() use($db,$app){
                          ON user_has_favorite.fk_business_id = business.business_id 
                          WHERE user_has_favorite.fk_user_id = $id");
                     if(rowCount($rows)){
-                        echo sendJSON(20, "list", $rows);
+                        echo sendJSON(20, null, $rows);
                     } else {
                         echo sendJSON(30, null, null);
                     }
@@ -307,7 +307,7 @@ $app->group('/user', function() use($db,$app){
                          ON user_has_credit_card.fk_credit_card_id = credit_card.credit_card_id 
                          WHERE user_has_credit_card.fk_user_id = $id");
                     if(rowCount($rows)){
-                        echo sendJSON(20, "list", $rows);
+                        echo sendJSON(20, null, $rows);
                     } else {
                         echo sendJSON(30, null, null);
                     }
@@ -351,7 +351,7 @@ $app->group('/user', function() use($db,$app){
                                         ;");
                     
                         if(rowCount($rows)){
-                            echo sendJSON(20, "list", $rows);
+                            echo sendJSON(20, null, $rows);
                         } else {
                             echo sendJSON(30, null, null);
                         }

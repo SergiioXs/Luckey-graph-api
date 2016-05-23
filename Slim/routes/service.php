@@ -38,11 +38,11 @@ $app->group('/service', function() use($db,$app){
     $app->post('/create', function() use($db,$app){
         global $vFullName, $vDescription, $vId, $vPrice;
            $R           = $app->request;
-           $name        = validate($vFullName, trim($R->post('name'))); 
-           $description = validate($vDescription, trim($R->post('description'))); 
-           $price       = validate($vPrice, trim($R->post('price'))); 
-           $id          = validate($vId, $R->post('id')); 
-           $password    = sha1($R->post('password')); 
+           $name        = validate($vFullName, trim($R->params('name'))); 
+           $description = validate($vDescription, trim($R->params('description'))); 
+           $price       = validate($vPrice, trim($R->params('price'))); 
+           $id          = validate($vId, $R->params('id')); 
+           $password    = sha1($R->params('password')); 
 
             if($name && $description && $id && $price){
                 try {
@@ -84,11 +84,11 @@ $app->group('/service', function() use($db,$app){
     $app->put('/update/:sid', function($sid) use($db,$app){
         global $vFullName, $vDescription, $vId, $vPrice;
            $R           = $app->request;
-           $name        = validate($vFullName,    $R->post('name')); 
-           $description = validate($vDescription, $R->post('description')); 
-           $price       = validate($vPrice,       $R->post('price')); 
-           $id          = validate($vId,          $R->post('id'));  
-           $password    = sha1($R->post('password')); 
+           $name        = validate($vFullName,    $R->params('name')); 
+           $description = validate($vDescription, $R->params('description')); 
+           $price       = validate($vPrice,       $R->params('price')); 
+           $id          = validate($vId,          $R->params('id'));  
+           $password    = sha1($R->params('password')); 
            $sid         = validate($vId,          $sid);
 
         if($name && $description && $id && $price && $sid){
@@ -135,8 +135,8 @@ $app->group('/service', function() use($db,$app){
         global $vId;
            $R           = $app->request;
            $sid         = validate($vId, $sid);
-           $id          = validate($vId, $R->post('id'));  
-           $password    = sha1($R->post('password')); 
+           $id          = validate($vId, $R->params('id'));  
+           $password    = sha1($R->params('password')); 
 
         if($id && $sid){
             try {

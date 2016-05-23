@@ -33,11 +33,11 @@ $app->group('/done_service', function() use($db,$app){
     $app->post('/create', function() use($db,$app){
         global $vId, $vRate, $vComment, $vFullDate;
            $R       = $app->request;
-           $ccid    = validate($vId, $R->post('ccid')); 
-           $sid     = validate($vId, $R->post('sid')); 
-           $rate    = validate($vRate, $R->post('rate')); 
-           $comment = validate($vComment, $R->post('comment')); 
-           $date    = validate($vFullDate, $R->post('fulldate')); 
+           $ccid    = validate($vId, $R->params('ccid')); 
+           $sid     = validate($vId, $R->params('sid')); 
+           $rate    = validate($vRate, $R->params('rate')); 
+           $comment = validate($vComment, $R->params('comment')); 
+           $date    = validate($vFullDate, $R->params('fulldate')); 
         if($ccid && $sid && $rate && $comment && $date){
             try {
 

@@ -43,8 +43,8 @@ $app->group('/app', function() use($db,$app){
         
 
         $R        = $app->request;
-        $apodo    = validate("/^[a-zA-Z0-9ñÑáéíó]{2}[a-zA-Z0-9ñÑáéíó ]+$/", $R->get('apodo'));
-        $bebida   = validate("/^[1-9]+$/", $R->get('bebida'));   
+        $apodo    = validate("/^[a-zA-Z0-9ñÑáéíó]{2}[a-zA-Z0-9ñÑáéíó ]+$/", $R->params('apodo'));
+        $bebida   = validate("/^[1-9]+$/", $R->params('bebida'));   
         if($apodo && $bebida){
             try {
                 SQL("INSERT INTO digital(state, type, text) VALUES (1, $bebida, '$apodo');");

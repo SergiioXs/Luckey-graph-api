@@ -37,12 +37,12 @@ $app->group('/credit_card', function() use($db,$app){
     $app->post('/create', function() use($db,$app){
         global $vFullName, $vNumber, $vDate, $vCvc, $vCp, $vId;
         $R         = $app->request;
-        $name      = validate($vFullName,   $R->post('name')); 
-        $number    = validate($vNumber, $R->post('number'));  
-        $date      = validate($vDate,   $R->post('date'));     
-        $cvc       = validate($vCvc,    $R->post('cvc'));
-        $cp        = validate($vCp,     $R->post('cp'));
-        $userid    = validate($vId,     $R->post('id'));
+        $name      = validate($vFullName,   $R->params('name')); 
+        $number    = validate($vNumber, $R->params('number'));  
+        $date      = validate($vDate,   $R->params('date'));     
+        $cvc       = validate($vCvc,    $R->params('cvc'));
+        $cp        = validate($vCp,     $R->params('cp'));
+        $userid    = validate($vId,     $R->params('id'));
         
         if($name && $number && $date && $cvc && $cp && $userid){
             try {
@@ -85,14 +85,14 @@ $app->group('/credit_card', function() use($db,$app){
     $app->put('/update/:ccid', function($ccid) use($db,$app){
         global $vFullName, $vNumber, $vDate, $vCvc, $vCp, $vId;
         $R         = $app->request;
-        $name      = validate($vFullName, $R->post('name')); 
-        $number    = validate($vNumber,   $R->post('number'));  
-        $date      = validate($vDate,     $R->post('date'));    
-        $cvc       = validate($vCvc,      $R->post('cvc'));
-        $cp        = validate($vCp,       $R->post('cp'));
+        $name      = validate($vFullName, $R->params('name')); 
+        $number    = validate($vNumber,   $R->params('number'));  
+        $date      = validate($vDate,     $R->params('date'));    
+        $cvc       = validate($vCvc,      $R->params('cvc'));
+        $cp        = validate($vCp,       $R->params('cp'));
         $ccid      = validate($vId,       $ccid);
-        $id        = validate($vId,       $R->post('id'));
-        $password  = sha1($R->post('password'));
+        $id        = validate($vId,       $R->params('id'));
+        $password  = sha1($R->params('password'));
         if($name && $number && $date && $cvc && $cp && $id && $ccid){
             if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id"))){
                 if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id AND user_password = '$password'"))){
@@ -134,9 +134,9 @@ $app->group('/credit_card', function() use($db,$app){
     $app->post('/delete/:ccid', function($ccid) use($db,$app){
         global $vId;
         $R           = $app->request;
-        $password    = sha1($R->post('password')); //Solo letras
+        $password    = sha1($R->params('password')); //Solo letras
         $ccid        = validate($vId, $ccid); //Solo letras
-        $id          = validate($vId, $R->post('id'));
+        $id          = validate($vId, $R->params('id'));
 
         if($id && $ccid){
             // Check if the user exist
