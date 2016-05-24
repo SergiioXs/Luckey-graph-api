@@ -18,32 +18,27 @@ $app->group('/business', function() use($db,$app){
         }
     });
     //Change position
-    $app->put('/update/position/:id', function($id) use($db,$app){
+    $app->put('/update/position/:bid', function($bid) use($db,$app){
         global $vId, $vCoords;
         $R    = $app->request;
-        $uid  = validate($vId, $id);
+        $bid  = validate($vId, $bid);
         $long = validate($vCoords, $R->params('lng'));
         $lat  = validate($vCoords, $R->params('lat'));
-        if($uid && $long && $lat){
+        if($bid && $long && $lat){
             try {
-                $user = getData("SELECT fk_business_id FROM user WHERE user_id = $uid");
-                if(rowCount($user)){
-                        if($user[0]['fk_business_id']){
-                            try {
-                                SQL("UPDATE business
-                                        SET longitude = $long,
-                                            latitude  = $lat
-                                        WHERE business_id = ".$user[0]['fk_business_id']
-                                    );
-                                echo sendJSON(22, null, null);
-                            } catch (Exception $e) {
-                                echo sendJSON(40, null, null);
-                            }
-                        } else {
-                            echo sendJSON(46, null, null); 
-                        }
+                if(rowCount(getData("SELECT user_id FROM user WHERE fk_business_id = $bid"))){
+                    try {
+                        SQL("UPDATE business
+                                SET longitude = $long,
+                                    latitude  = $lat
+                                WHERE business_id = $bid"
+                            );
+                        echo sendJSON(22, null, null);
+                    } catch (Exception $e) {
+                        echo sendJSON(40, null, null);
+                    }
                 } else {
-                    echo sendJSON(44, null, null);
+                    echo sendJSON(45, null, null);
                 }
             } catch (Exception $e) {
                echo sendJSON(40, null, null); 
@@ -233,55 +228,49 @@ $app->get('/geolocation/near', function() use($db,$app){
     });
 
 //Delete an business by the user ID
-    $app->post('/delete/:id', function($id) use($db,$app){
+    $app->post('/delete/:bid', function($bid) use($db,$app){
         global $vId;
         $R           = $app->request;
         $password    = sha1($R->params('password')); //Solo letras
-        $uid         = validate($vId, $id);
+        $bid         = validate($vId, $bid);
 
-        if($uid){
-            // Check if the user exist
-            $ExistUser = getData("SELECT user_id FROM user WHERE user_id = $id");
-            if(rowCount($ExistUser)){
+        if($bid){
+            // Check if the business exist
+            if(rowCount(getData("SELECT user_id FROM user WHERE fk_business_id = $bid"))){
                     
                     // Check if the password match
                     $MatchPass = getData("SELECT fk_business_id FROM user WHERE user_id = $id AND user_password = '$password'");
                     if(rowCount($MatchPass)){
 
                             // Get Business ID
-                            $bussines_id = $MatchPass[0]['fk_business_id'];
-                            if($bussines_id){
-                                try {
+                            try {
 
-                                    //Delete all done services 
-                                    $Services = getData("SELECT service_id FROM service WHERE fk_business_id = ".$bussines_id);
-                                    if(rowCount($Services)){    
-                                        $ServicesIDs = "";
-                                        for ($i=0; $i < rowCount($Services); $i++) { 
-                                            if($i == 0)
-                                                $ServicesIDs .= "fk_service_id = ".$Services[$i]['service_id'];
-                                            else
-                                                $ServicesIDs .= " AND fk_service_id = ".$Services[$i]['service_id']; 
-                                        }
-                                        SQL("DELETE FROM done_service WHERE $ServicesIDs;
-                                             DELETE FROM service      WHERE fk_business_id = $bussines_id;
-                                            ");
+                                //Delete all done services 
+                                $Services = getData("SELECT service_id FROM service WHERE fk_business_id = ".$bid);
+                                if(rowCount($Services)){    
+                                    $ServicesIDs = "";
+                                    for ($i=0; $i < rowCount($Services); $i++) { 
+                                        if($i == 0)
+                                            $ServicesIDs .= "fk_service_id = ".$Services[$i]['service_id'];
+                                        else
+                                            $ServicesIDs .= " AND fk_service_id = ".$Services[$i]['service_id']; 
                                     }
+                                    SQL("DELETE FROM done_service WHERE $ServicesIDs;
+                                         DELETE FROM service      WHERE fk_business_id = $bid;
+                                        ");
+                                }
 
-                                /* DELETE USER */
-                                        /* Delete user's favorites and user's business of others users */ 
-                                SQL("DELETE FROM user_has_favorite         WHERE fk_business_id = $bussines_id;
-                                        /* Delete user's preferences */
-                                     UPDATE user SET fk_business_id = NULL WHERE user_id        = $id;
-                                        /* Delete business */
-                                     DELETE FROM business                  WHERE business_id    = $bussines_id;
-                                    ");    
-                                echo sendJSON(23, null, null); // All data has been deleted successfully.
-                            } catch (Exception $e) {
-                               echo sendJSON(40, null, null); //Error 
-                            }
-                        } else {
-                            echo sendJSON(46, null, null); // User doesnt have business
+                            /* DELETE USER */
+                                    /* Delete user's favorites and user's business of others users */ 
+                            SQL("DELETE FROM user_has_favorite         WHERE fk_business_id = $bid;
+                                    /* Delete user's preferences */
+                                 DELETE FROM user                      WHERE fk_business_id = $bid;
+                                    /* Delete business */
+                                 DELETE FROM business                  WHERE business_id    = $bid;
+                                ");    
+                            echo sendJSON(23, null, null); // All data has been deleted successfully.
+                        } catch (Exception $e) {
+                           echo sendJSON(40, null, null); //Error 
                         }
 
                     } else {
@@ -289,7 +278,7 @@ $app->get('/geolocation/near', function() use($db,$app){
                     }
                     
             } else {
-                echo sendJSON(44, null, null); //Doesn't exist that user 
+                echo sendJSON(45, null, null); //Doesn't exist that user 
             }
         } else {
             echo sendJSON(60, null, null);
@@ -298,7 +287,7 @@ $app->get('/geolocation/near', function() use($db,$app){
     });
 
 
-    //Describe a business by his ID
+    //Add business to favorite list
     $app->post('/add_to_favorite/:bid', function($bid) use($db,$app){
         global $vId;
         $R   = $app->request;
@@ -308,18 +297,52 @@ $app->get('/geolocation/near', function() use($db,$app){
             try {
                 $rows = getData("SELECT user_id FROM user WHERE user_id = $uid");
                 if(rowCount($rows)){
-                	$ebus = getData("SELECT business_id FROM business WHERE business_id = $bid");
-                	if(rowCount($ebus)){
-	                	$exist = getData("SELECT fk_user_id FROM user_has_favorite WHERE fk_business_id = $bid && fk_user_id = $uid");
-		                if(!rowCount($exist)){
-		                    SQL("INSERT INTO user_has_favorite(fk_user_id, fk_business_id) VALUES($uid, $bid);");
-		                    echo sendJSON(22, null, null);    
-	                	} else {
-	                		echo sendJSON(31, null, null);
-	                	}
-	                } else {
-	                	echo sendJSON(45, null, null);
-	                }
+                    $ebus = getData("SELECT business_id FROM business WHERE business_id = $bid");
+                    if(rowCount($ebus)){
+                        $exist = getData("SELECT fk_user_id FROM user_has_favorite WHERE fk_business_id = $bid && fk_user_id = $uid");
+                        if(!rowCount($exist)){
+                            SQL("INSERT INTO user_has_favorite(fk_user_id, fk_business_id) VALUES($uid, $bid);");
+                            echo sendJSON(22, null, null);    
+                        } else {
+                            echo sendJSON(31, null, null);
+                        }
+                    } else {
+                        echo sendJSON(45, null, null);
+                    }
+                } else {
+                    echo sendJSON(44, null, null);
+                }              
+            } catch (Exception $e) {
+               echo sendJSON(40, null, null); 
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
+
+
+    //Remove business from favorite list
+    $app->post('/remove_from_favorite/:bid', function($bid) use($db,$app){
+        global $vId;
+        $R   = $app->request;
+        $bid = validate($vId, $bid);
+        $uid = validate($vId, $R->params("id"));
+        if($uid && $bid){
+            try {
+                $rows = getData("SELECT user_id FROM user WHERE user_id = $uid");
+                if(rowCount($rows)){
+                    $ebus = getData("SELECT business_id FROM business WHERE business_id = $bid");
+                    if(rowCount($ebus)){
+                        $exist = getData("SELECT fk_user_id FROM user_has_favorite WHERE fk_business_id = $bid && fk_user_id = $uid");
+                        if(rowCount($exist)){
+                            SQL("DELETE FROM user_has_favorite WHERE fk_business_id = $bid && fk_user_id = $uid;");
+                            echo sendJSON(23, null, null);    
+                        } else {
+                            echo sendJSON(32, null, null);
+                        }
+                    } else {
+                        echo sendJSON(45, null, null);
+                    }
                 } else {
                     echo sendJSON(44, null, null);
                 }              
