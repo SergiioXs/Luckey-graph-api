@@ -7,6 +7,7 @@ $(document).ready( function () {
         {code:"23", description:"Data has been deleted successfully."},
         {code:"30", description:"No data found."},
         {code:"31", description:"This business is already in your favorite list"},
+        {code:"32", description:"You dont have this business in your favorite list"},
         {code:"40", description:"Invalid data"},
         {code:"41", description:"Email or password don’t match"},
         {code:"42", description:"Email already exist"},
