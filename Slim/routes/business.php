@@ -172,43 +172,58 @@ $app->get('/geolocation/near', function() use($db,$app){
     });
 
 //update business
-    $app->put('/update/:id', function($id) use($db,$app){
-        global $vFullName, $vAddress, $vPhone, $vSchedule;
+    $app->put('/update/:bid', function($bid) use($db,$app){
+        global $vFullName, $vAddress, $vEmail, $vPhone, $vSchedule, $VId;
         $R         = $app->request;
         $name      = validate($vFullName, $R->params('name')); //Solo letras
-        $address   = validate($vAddress, $R->params('address'));  //Solo letras
-        $phone     = validate($vPhone, $R->params('phone'));     //
+        $address   = validate($vAddress,  $R->params('address'));  //Solo letras
+        $phone     = validate($vPhone,    $R->params('phone'));     //
+        $email     = validate($vEmail,    $R->params('email'));
         $schedule  = $R->params('schedule');
         $password  = sha1($R->params('password'));
+        $bid       = validate($vId, $bid);
+        if($name && $phone && $address && $bid && $email){
+            
+            $ExistUser = getData("SELECT user_email FROM user WHERE fk_business_id = $bid");
+            if(rowCount($ExistUser)){
+                if(rowCount(getData("SELECT user_id FROM user WHERE fk_business_id = $bid AND user_password = '$password'"))){
+                    
+                    //Check if the user entered a new email
+                    if($email != $ExistUser){
+                        //Check if the new email is available
+                        if(rowCount(getData("SELECT user_id FROM user WHERE user_email = '$email'"))){
+                            echo sendJSON(42, null, null); //Email already registered
+                            return 0;
+                        } 
+                    }
 
-        if($name && $phone && $address){
-            // If exist user
-            if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id"))){
-                if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id AND user_password = '$password'"))){
-                    $HasBusiness = getData("SELECT fk_business_id FROM user WHERE user_id = $id");
-                    if($HasBusiness[0]['fk_business_id'] != NULL){
-                        try {
-                                 /* UPDATE BUSINESS */
-                            SQL("UPDATE business SET
-                                  business_name    = '$name',
-                                  business_address = '$address',
-                                  business_phone   = '$phone',
-                                  business_schedule= '$schedule'
-                                WHERE business_id  = ".$HasBusiness[0]['fk_business_id']."
+                   
+                    try {
+                             /* UPDATE BUSINESS */
+                        SQL("UPDATE business SET
+                              business_name    = '$name',
+                              business_address = '$address',
+                              business_phone   = '$phone',
+                              business_schedule= '$schedule'
+                            WHERE business_id  = $bid
+                        ");
+                        
+                        if($email != $ExistUser){
+                            SQL("UPDATE user SET
+                                    user_email = '$email'
+                                WHERE fk_business_id = $bid
                             ");
-                            echo sendJSON(22, null, null); // All data has been changed sucessfully
-                       
-                        } catch (Exception $e) {
-                            echo sendJSON(40, null, null);
                         }
-                    } else {
-                        echo sendJSON(46, null, null); // User doesn't have bussines DUH!
+
+                        echo sendJSON(22, null, null); // All data has been changed sucessfully
+                    } catch (Exception $e) {
+                        echo sendJSON(40, null, null);
                     }
                 } else {
                     echo sendJSON(43, null, null); // Passwords dont match
                 }
             } else {
-                echo sendJSON(44, null, null); //User doesnt exist
+                echo sendJSON(45, null, null); //business doesnt exist
             }
         } else {
             echo sendJSON(60, null, null);

@@ -39,7 +39,7 @@ $app->group('/user', function() use($db,$app){
                                 $business[0]['schedule'] = json_decode($business[0]['schedule']); 
                                 echo sendJSON(20, null, $business); // Send business    
                             } else {
-                                echo sendJSON(45, null, null); // Business doesnt exists
+                                echo sendJSON(40, null, null); // error
                             }
                         } else {
                             echo sendJSON(41, null, null);
