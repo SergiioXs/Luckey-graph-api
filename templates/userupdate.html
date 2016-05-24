@@ -2,9 +2,9 @@
 /* I N F O R M A T I O N */
 	var Titulo = "Update user";
 	var Metodo = "PUT";
-	var table = CodeTable(["22", "43", "44", "60"]);
-	var conditions = ConditionTable(["firstname", "lastname", "username", "id", "password", "preference", "_METHOD"]);
-	var Descripcion = "Updates the basic information of a previously created account, it must be confirmed by the user by using your password.<br><br>Here is a table of status code that the API could send.<br><br>"+exampleMessage+""+table+""+conditions;
+	var table = CodeTable(["22", "42", "43", "44", "60"]);
+	var conditions = ConditionTable(["firstname", "lastname", "username", "id", "password", "email", "_METHOD"]);
+	var Descripcion = "Updates the basic information of a previously created account, it must be confirmed by the user using your password.<br><br>Here is a table of status code that the API could send.<br><br>"+exampleMessage+""+table+""+conditions;
 	var URL = dominio+"user/update/:id";
 
 /* T E M P L A T E */ 
@@ -20,10 +20,11 @@
 		var lastname 	  = $("#lastname").val();
 		var username 	  = $("#username").val();
 		var id     	      = $("#id").val();
-		var preference    = $("#drpdupdt").val();
+		var email         = $("#email").val();
 		var password      = $("#password").val();
-		var data          = "firstname="+firstname+"&lastname="+lastname+"&username="+username+"&preference="+preference+"&password="+password+"&_METHOD=PUT";
+		var data          = "firstname="+firstname+"&lastname="+lastname+"&username="+username+"&email="+email+"&password="+password+"&_METHOD=PUT";
 		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		console.log(data);
 		AJAX(dominio+"user/update/"+id, Metodo, data);
 		
 	});
@@ -61,13 +62,12 @@
   <input id='username' type="text" placeholder="Username">
 </div>
 <br><br>
-  <label>would you like to show your full name or username?</label>
-  <br>
-  <select class="ui dropdown" id='drpdupdt' style="width: 100%;">
-	  <option value="1">Full name</option>
-	  <option value="2">Username</option>
-  </select>
-  <br><br>
+<label>New email</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='email' type="text" placeholder="email@mail.com">
+</div>
+<br><br>
   <label>Confirm with password</label>
   <br>
   <div class="ui input" style="width: 95%;">

@@ -2,10 +2,10 @@
 /* I N F O R M A T I O N */
 	var Titulo = "Update locksmith position";
 	var Metodo = "POST";
-	var table = CodeTable(["22", "40", "44", "46"]);
-	var conditions = ConditionTable(["id", "lat", "lng"]);
+	var table = CodeTable(["22", "40", "45", "60"]);
+	var conditions = ConditionTable(["bid", "lat", "lng"]);
 	var Descripcion = "Update the current locksmith position. <br><br>"+exampleMessage+""+table+""+conditions;
-	var URL = dominio+"business/update/position/:id";
+	var URL = dominio+"business/update/position/:bid";
 
 /* T E M P L A T E */ 
 	$("#Titulo").html(Titulo);
@@ -41,10 +41,10 @@
 
 </script>
 <!-- F O R M    F O R    I N P U T     C O D E    -->
-<label>User id</label>
+<label>Business id</label>
 <br>
 <div class="ui input" style="width: 95%;">
-  <input id='id' type="text" placeholder="User id" value="">
+  <input id='id' type="text" placeholder="Busines id" value="">
 </div>
 <br><br>
 <label>Latitude</label>

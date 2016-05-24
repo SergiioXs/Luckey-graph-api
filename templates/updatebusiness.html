@@ -2,10 +2,10 @@
 /* I N F O R M A T I O N */
 	var Titulo = "Update business";
 	var Metodo = "PUT";
-	var table = CodeTable(["22", "43", "44", "46", "60"]);
-	var conditions = ConditionTable(["id", "name", "address", "phone", "password", "schedule"]);
+	var table = CodeTable(["22", "43", "44", "45", "60"]);
+	var conditions = ConditionTable(["bid", "name", "address", "phone", "email", "password", "schedule"]);
 	var Descripcion = "A user with a business, could easily modify business data providing its identifier. The information may be modified is: name, address, phone and schedule.<br><br>"+exampleMessage+""+table+""+conditions;
-	var URL = dominio+"business/update/:id";
+	var URL = dominio+"business/update/:bid";
 
 /* T E M P L A T E */ 
 	$("#Titulo").html(Titulo);
@@ -30,6 +30,7 @@
 		}
 		var data = "name="+name+"&address="+address+"&phone="+phone+"&schedule="+schedule+"&password="+password+"&_METHOD=PUT";
 		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		console.log(data);
 		AJAX(dominio+"business/update/"+id, Metodo, data);
 		
 	});
@@ -53,7 +54,7 @@
 </script>
 
 <!-- F O R M    F O R    I N P U T     C O D E    -->
-<label>User id</label>
+<label>Business id</label>
 <br>
 <div class="ui input" style="width: 95%;">
   <input id='id' type="number" placeholder="id" value="">
@@ -77,7 +78,13 @@
 <div class="ui input" style="width: 95%;">
   <input id='phone' type="phone" placeholder="(646) 192-2565">
 </div>
+<br><br>
+<label>New Email</label>
 <br>
+<div class="ui input" style="width: 95%;">
+  <input id='email' type="text" placeholder="email">
+</div>
+<br><br>
 <label>schedule</label>
 <br>
 <div class='ui segments'>
@@ -283,7 +290,7 @@
 <label>Confirm with password</label>
 <br>
 <div class="ui input" style="width: 95%;">
-  <input id='password' type="text" placeholder="Business name">
+  <input id='password' type="text" placeholder="password">
 </div>
 <br><br>
 <button class='ui teal button' style="width: 95%;" id='btn'>Save changes</button>

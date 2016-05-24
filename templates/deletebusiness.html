@@ -2,10 +2,10 @@
 /* I N F O R M A T I O N */
 	var Titulo = "Delete business";
 	var Metodo = "POST";
-	var table = CodeTable(["23", "43", "44", "46", "60"]);
-	var conditions = ConditionTable(["id", "password"]);
-	var Descripcion = "A user who has a business can delete it at any time. Including statistics and if another user has the business as favorite, will be removed from the list too.<br><br>"+exampleMessage+""+table+""+conditions;
-	var URL = dominio+"business/delete/:id";
+	var table = CodeTable(["23", "40", "43", "45", "60"]);
+	var conditions = ConditionTable(["bid", "password"]);
+	var Descripcion = "You can delete your business at any time. Including statistics and if another user has the business as favorite, will be removed from the list too.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"business/delete/:bid";
 
 /* T E M P L A T E */ 
 	$("#Titulo").html(Titulo);
@@ -26,7 +26,7 @@
 
 <!-- F O R M    F O R    I N P U T     C O D E    -->
 
-<label>User ID</label>
+<label>Business ID</label>
 <br>
 <div class="ui input" style="width: 95%;">
   <input id='id' type="text" placeholder="User id" value="">

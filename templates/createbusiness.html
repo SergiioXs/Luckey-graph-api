@@ -2,9 +2,9 @@
 /* I N F O R M A T I O N */
 	var Titulo = "Create new business";
 	var Metodo = "POST";
-	var table = CodeTable(["21", "43", "44", "51", "60"]);
-	var conditions = ConditionTable(["id", "bname", "address", "phone", "password", "schedule"]);
-	var Descripcion = "A user can create a business, and set common business data as they are, name, address, phone, schedule. This information will be visible to all users.<br><br>"+exampleMessage+""+table+""+conditions;
+	var table = CodeTable(["21", "40", "42", "60"]);
+	var conditions = ConditionTable(["id", "bname", "address", "phone", "email", "password", "schedule"]);
+	var Descripcion = "You can create a business, and set common business data as they are, name, address, phone, schedule. This information will be visible to all users.<br><br>"+exampleMessage+""+table+""+conditions;
 	var URL = dominio+"business/create";
 
 /* T E M P L A T E */ 
@@ -18,9 +18,9 @@
 		var name 	  = $("#name").val();
 		var address   = $("#address").val();
 		var phone     = $("#phone").val();
-		var id     	  = $("#id").val();
-		var password = $("#password").val();
-		var schedule = '[';
+		var email     = $("#email").val();
+		var password  = $("#password").val();
+		var schedule  = '[';
 		for (var i = 1; i <= 7; i++) {
 			if(i==7) {
 				schedule += '{"open": '+($("#state"+i).val())+', "from": "'+($("#start"+i).val())+'", "to": "'+($("#end"+i).val())+'"}]';
@@ -28,7 +28,7 @@
 				schedule += '{"open": '+($("#state"+i).val())+', "from": "'+($("#start"+i).val())+'", "to": "'+($("#end"+i).val())+'"},';	
 			}
 		}
-		var data = "bname="+name+"&address="+address+"&phone="+phone+"&id="+id+"&schedule="+schedule+"&password="+password;
+		var data = "bname="+name+"&address="+address+"&phone="+phone+"&email="+email+"&schedule="+schedule+"&password="+password;
 		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
 		AJAX(URL, Metodo, data);
 	});
@@ -52,13 +52,7 @@
 </script>
 
 <!-- F O R M    F O R    I N P U T     C O D E    -->
-<label>User id</label>
-<br>
-<div class="ui input" style="width: 95%;">
-  <input id='id' type="number" placeholder="id" value="">
-</div>
 
-<br><br>
 <label>Business name</label>
 <br>
 <div class="ui input" style="width: 95%;">
@@ -76,12 +70,21 @@
 <div class="ui input" style="width: 95%;">
   <input id='phone' type="phone" placeholder="(646) 192-2565">
 </div>
+<br><br>
+<label>Email</label>
 <br>
+<div class="ui input" style="width: 95%;">
+  <input id='email' type="text" placeholder="email">
+</div>
+<br><br>
+
+<label>Choose a password</label>
+<br><br>
+<div class="ui input" style="width: 95%;">
+  <input id='password' type="text" placeholder="Password">
+</div>
 <label>schedule</label>
 <br>
-
-
-
 <div class='ui segments'>
 	<div class="ui compact red segment" style="width: 100%;">
 		<label>Monday</label>
@@ -279,12 +282,7 @@
 		</div>
 	</div>
 </div>
+
 <br><br>
-<label>Confirm with password</label>
-<br>
-<div class="ui input" style="width: 95%;">
-  <input id='password' type="text" placeholder="Password">
-</div>
-<br><br>
-<button class='ui blue button' style="width: 95%;" id='btn'>Create account</button>
+<button class='ui blue button' style="width: 95%;" id='btn'>Create business</button>
 
