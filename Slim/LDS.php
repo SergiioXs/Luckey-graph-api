@@ -88,6 +88,9 @@ function getStatusMSG($code) {
         case 31:
             $msg = "This business is already in your favorite list";
             break;
+        case 32:
+            $msg = "You dont have this business in your favorite list";
+            break;
         case 40:
             $msg = "Invalid data";
             break;
