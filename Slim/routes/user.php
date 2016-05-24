@@ -12,39 +12,48 @@ $app->group('/user', function() use($db,$app){
 
 //Obtener el ID de una cuenta
     $app->get('/login', function() use($db,$app){
-        global $vEmail, $vRole;
+        global $vEmail;
         $R        = $app->request;
         $email    = validate($vEmail, $R->params('email')); 
         $password = sha1($R->params('password')); 
-        $role     = validate($vRole, $R->params('role'));
-
-        if($email && $role){
-            try {
-                if($role == 1) { //ROLE User
-                    $rows = getData("SELECT user_id AS id, user_username AS username, user_firstname AS firstName, user_lastname AS lastName, user_email AS email, fk_business_id AS businessId FROM user WHERE user_email = '$email' && user_password = '$password'");
-                    if(rowCount($rows)){    
-                        echo sendJSON(20, "user", $rows);    // Send user data
-                
-                    } else {
-                        echo sendJSON(41, null, null); //invalid login
-                    }
-                } else { //ROLE Locksmith
-                    $rows = getData("SELECT user_id AS id, fk_business_id AS businessId FROM user WHERE user_email = '$email' && user_password = '$password' && fk_business_id != 'null'");
-                    if(rowCount($rows)){    
-                        $business = getData("SELECT business_id AS id, business_name AS name, business_address AS address, business_phone AS phone, business_schedule AS schedule FROM business WHERE business_id = ".$rows[0]['businessId']);
-                        if(rowCount($business)) {
-                            $business[0]['schedule'] = json_decode($business[0]['schedule']); 
-                            echo sendJSON(20, "business", $business); // Send business    
+       
+        if($email){
+            $uid = getData("SELECT user_id FROM user WHERE user_email = '$email' AND user_password = '$password'");
+            if($uid){
+                $accountType = getData("SELECT user_setting_view_username AS type FROM user_setting WHERE fk_user_id = ".$uid[0]['user_id']);
+                try {
+                    if($accountType[0]['type'] == 1) { //ROLE User
+                        $rows = getData("SELECT 1 AS _accountType, user_id AS id, user_username AS username, user_firstname AS firstName, user_lastname AS lastName, user_email AS email, fk_business_id AS businessId FROM user WHERE user_email = '$email' && user_password = '$password'");
+                        if(rowCount($rows)){    
+                            echo sendJSON(20, null, $rows); // Send user data
+                    
                         } else {
-                            echo sendJSON(45, null, null); // Business doesnt exists
+                            echo sendJSON(41, null, null); //invalid login
                         }
-                    } else {
-                        echo sendJSON(41, null, null);
+                    } else { //ROLE Locksmith
+                        $rows = getData("SELECT user_id AS id, fk_business_id AS businessId FROM user WHERE user_email = '$email' && user_password = '$password' && fk_business_id != 'null'");
+                        if(rowCount($rows)){  
+                            $usid = $rows[0]['id'];  
+                            $business = getData("SELECT 2 AS _accountType, '$usid' AS _userId, business_id AS id, business_name AS name, business_address AS address, business_phone AS phone, business_schedule AS schedule FROM business WHERE business_id = ".$rows[0]['businessId']);
+                            if(rowCount($business)) {
+                                $business[0]['schedule'] = json_decode($business[0]['schedule']); 
+                                echo sendJSON(20, null, $business); // Send business    
+                            } else {
+                                echo sendJSON(45, null, null); // Business doesnt exists
+                            }
+                        } else {
+                            echo sendJSON(41, null, null);
+                        }
                     }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
                 }
-            } catch (Exception $e) {
-               echo sendJSON(40, null, null); 
+            } else {
+                echo sendJSON(41, null, null);
             }
+
+
+
         } else {
             echo sendJSON(60, null, null);
         }
@@ -56,14 +65,14 @@ $app->group('/user', function() use($db,$app){
         $uid = validate($vId, $id);
         if($uid){    
             try {
-                $rows = getData("SELECT user.user_firstname AS firstName, user.user_lastname AS lastName, user.user_username AS username,
-                                        user_setting.user_setting_view_username AS preference, user.fk_business_id AS businessId
+                $rows = getData("SELECT user.user_firstname AS firstName, user.user_lastname AS lastName, user.user_username AS username, user.user_email AS email, 
+                                        user_setting.user_setting_view_username AS accountType, user.fk_business_id AS businessId
                                  FROM user 
                                  INNER JOIN user_setting
                                  ON user_setting.fk_user_id = user.user_id 
                                  WHERE user.user_id = $id");
                 if(rowCount($rows)){
-                	echo sendJSON(20, "user", $rows);
+                	echo sendJSON(20, null, $rows);
                 } else {
                 	echo sendJSON(30, null, null);
                 }
@@ -99,7 +108,7 @@ $app->group('/user', function() use($db,$app){
                          /* GET The new user id */ 
                          SET @userid = (SELECT user_id FROM user WHERE user_email = '$email');
                          
-                         /* Create a new user preferences */
+                         /* Create a new user preferences (account type)*/
                          INSERT INTO user_setting(user_setting_view_username, fk_user_id) values (1, @userid);
                     ");
                     echo sendJSON(21, null, null);
@@ -118,41 +127,48 @@ $app->group('/user', function() use($db,$app){
 
 //Update an user by the ID
     $app->put('/update/:id', function($id) use($db,$app){
-        global $vFirstName, $vLastName, $vUsername, $vPreference, $vPassword, $vId; 
+        global $vFirstName, $vLastName, $vUsername, $vPassword, $vId, $vEmail; 
         $R           = $app->request;
         $firstname   = validate($vFirstName,  $R->params('firstname')); //Solo letras
         $lastname    = validate($vLastName,   $R->params('lastname'));  //Solo letras
         $username    = validate($vUsername,   $R->params('username'));     //
-        $preference  = validate($vPreference, $R->params('preference'));
         $password    = validate($vPassword,   $R->params('password'));
+        $email       = validate($vEmail,      $R->params('email'));
         $uid         = validate($vId, $id);
 
-        if($firstname && $lastname && $username && $preference && $password && $uid){
+        if($firstname && $lastname && $username && $password && $uid && $email){
             $password = sha1($password);
-            $ExistUser = getData("SELECT user_id FROM user WHERE user_id = $id");
-            if(rowCount($ExistUser)){
+            $ExistUser = getData("SELECT user_email FROM user WHERE user_id = $id");
 
+            if(rowCount($ExistUser)){
                 // Password match
                 if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id AND user_password = '$password'"))) {
+                    
+                    
+                    if($email != $ExistUser){
+                        if(rowCount(getData("SELECT user_id FROM user WHERE user_email = '$email'"))){
+                            echo sendJSON(42, null, null); //Email already registered
+                            return 0;
+                        } 
+                    }
+
                     try {
 
                         /* UPDATE BASIC INFORMATION*/
                         SQL("UPDATE user SET
                                 user_firstname = '$firstname',
                                 user_lastname  = '$lastname',
-                                user_username  = '$username'
+                                user_username  = '$username',
+                                user_email     = '$email'
                             WHERE user_id = $id;
 
-                            /* UPDATE PREFERENCES */
-                            UPDATE user_setting SET
-                                user_setting_view_username = $preference
-                            WHERE fk_user_id = $id;
 
                             ");    
                         echo sendJSON(22, null, null); // All data has been changed successfully.
                     } catch (Exception $e) {
                        echo sendJSON(40, null, null); //Error 
                     }
+                    
                 } else {
                     echo sendJSON(43, null, null); //Passwords don't match
                 }

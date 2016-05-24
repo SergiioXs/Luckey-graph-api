@@ -12,7 +12,7 @@ $app->group('/business', function() use($db,$app){
         }
         
         if(rowCount($rows)){
-            echo sendJSON(20, "business", $rows);
+            echo sendJSON(20, null, $rows);
         } else {
             echo sendJSON(30, null, null);
         }
@@ -58,7 +58,7 @@ $app->group('/business', function() use($db,$app){
         try {
             $r = getData("SELECT business_id AS id, business_name AS name, latitude, longitude FROM business");
             if(rowCount($r)){
-            	echo sendJSON(20, "list", $r);
+            	echo sendJSON(20, null, $r);
             } else {
                 echo sendJSON(30, null, null);
             }
@@ -87,7 +87,7 @@ $app->get('/geolocation/near', function() use($db,$app){
 							HAVING distance < $km /* 1 KM  a la redonda */
 							ORDER BY distance ASC");
 	        if(rowCount($r)){
-	        	echo sendJSON(20, "list", $r);
+	        	echo sendJSON(20, null, $r);
 	        } else {
 	            echo sendJSON(30, null, null);
 	        }
@@ -113,7 +113,7 @@ $app->get('/geolocation/near', function() use($db,$app){
                     for($i=0;$i < rowCount($rows); $i++){
                         $rows[$i]['schedule'] = json_decode($rows[$i]['schedule']); 
                     }
-                    echo sendJSON(20, "business", $rows);    
+                    echo sendJSON(20, null, $rows);    
                 } else {
                     echo sendJSON(30, null, null);
                 }              
@@ -127,46 +127,44 @@ $app->get('/geolocation/near', function() use($db,$app){
 
 //Create a new business
     $app->post('/create', function() use($db,$app){
-        global $vBusinessName, $vAddress, $vPhone, $vSchedule, $vId; 
+        global $vBusinessName, $vAddress, $vPhone, $vSchedule, $vEmail, $vId, $vPassword; 
         $R         = $app->request;
         $name      = validate($vBusinessName, $R->params('bname')); 
         $address   = validate($vAddress,      $R->params('address'));  
         $phone     = validate($vPhone,        $R->params('phone'));     
         $schedule  = $R->params('schedule');
-        $userid    = validate($vId,           $R->params('id'));
-        $password  = sha1($R->params('password'));
-        if($name && $address && $phone && $userid){
-            if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $userid "))) {
-                if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $userid AND user_password = '$password'"))) {
-                    try {
-                        $HasBusiness = getData("SELECT fk_business_id FROM user WHERE user_id = $userid");
-                        if($HasBusiness[0]['fk_business_id'] == null){
-                                 
-                                 /* CREATE A NEW BUSINESS */
-                            SQL("INSERT INTO business (business_name, business_address, business_phone, business_schedule)
-                                    VALUES ('$name', '$address', '$phone', '$schedule');
-                                 
-                                 /* GET The new business id */ 
-                                 SET @businessid = (SELECT MAX(business_id) FROM business);
-                                 
-                                 /* UPDATE user with his new business id */
-                                 UPDATE user SET fk_business_id = @businessid WHERE user_id = $userid;
-                            ");
-                            echo sendJSON(21, null, null); // Created sucessfully
-                        } else {
-                            echo sendJSON(51, null, null); // User already have a business
-                        }
+        //$userid    = validate($vId,           $R->params('id'));
 
+        //Datos para crear el usuario que contendra el business
+        $email     = validate($vEmail,        $R->params('email'));
+        $password  = validate($vPassword,     $R->params('password')); //Nueva password del business
+        if($name && $address && $phone && $email && $password){
+            if(!rowCount(getData("SELECT user_id FROM user WHERE user_email = '$email'"))) {
+                    try {        
+                        $password = sha1($password);
+    
+                        /* CREATE A NEW BUSINESS */
+                        SQL("INSERT INTO business (business_name, business_address, business_phone, business_schedule)
+                                VALUES ('$name', '$address', '$phone', '$schedule');
+                             
+                             /* GET The new business id */ 
+                             SET @businessid = (SELECT MAX(business_id) FROM business);
+                             
+                            /* CREATE A NEW USER */
+                            INSERT INTO user (user_username, user_firstname, user_lastname, user_email, user_password, fk_business_id)
+                                VALUES('Empty', 'Empty', 'Empty', '$email', '$password', @businessid);
+                            SET @userid = (SELECT MAX(user_id) FROM user);
+
+                            INSERT INTO user_setting (user_setting_view_username, fk_user_id)
+                                VALUES (2, @userid);
+                        ");
+                        echo sendJSON(21, null, null); // Created sucessfully
                     } catch (Exception $e) {
                         echo sendJSON(40, null, null); // ERROR
                     }
 
-                } else {
-                    echo sendJSON(43, null, null); // Password dont match
-                }
-
             } else {
-                echo sendJSON(44, null, null); // User doesnt exist
+                echo sendJSON(42, null, null); // email already registered
             }
         } else {  
             echo sendJSON(60, null, null);
