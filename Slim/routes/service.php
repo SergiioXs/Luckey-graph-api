@@ -6,7 +6,7 @@ $app->group('/service', function() use($db,$app){
     $app->get('/', function(){
         $rows = getData("SELECT service_id AS id, service_name AS name, service_description AS description, service_price AS price, fk_business_id AS businessId FROM service");
         if(rowCount($rows))
-            echo sendJSON(20, "service", $rows);
+            echo sendJSON(20, null, $rows);
         else 
             echo sendJSON(30, null, null);
     });

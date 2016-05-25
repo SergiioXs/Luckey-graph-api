@@ -7,7 +7,7 @@ $app->group('/done_service', function() use($db,$app){
         $rows = getData("SELECT done_service_id AS id, done_service_date AS date, done_service_rate AS rate, done_service_comment AS comment, fk_service_id AS serviceId, fk_credit_card_id AS creditCardId FROM done_service");
        
        if(rowCount($rows))
-            echo sendJSON(20, "doneService", $rows);
+            echo sendJSON(20, null, $rows);
         else 
             echo sendJSON(30, null, null);
     });
@@ -19,7 +19,7 @@ $app->group('/done_service', function() use($db,$app){
                              FROM done_service 
                              WHERE done_service_id = $id");
             if(rowCount($rows)){
-                echo sendJSON(20, "doneService", null);    
+                echo sendJSON(20, null, null);    
             } else {
                 echo sendJSON(30, null, null);
             }

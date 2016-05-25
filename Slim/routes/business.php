@@ -66,9 +66,9 @@ $app->group('/business', function() use($db,$app){
 $app->get('/geolocation/near', function() use($db,$app){
     global $vCoords, $vId;
     $R   = $app->request;
-    $lat = validate($vCoords, $R ->get("lat"));
-    $lng = validate($vCoords, $R ->get("lng"));
-    $km  = validate($vId, $R ->get("km"));
+    $lat = validate($vCoords, $R->params("lat"));
+    $lng = validate($vCoords, $R->params("lng"));
+    $km  = validate($vId,     $R->params("km"));
     if($lat && $lng && $km){
 	    try {
 	    	$r = getData("SELECT business_id AS id, business_name AS name, latitude, longitude,  
@@ -112,6 +112,30 @@ $app->get('/geolocation/near', function() use($db,$app){
                 } else {
                     echo sendJSON(30, null, null);
                 }              
+            } catch (Exception $e) {
+               echo sendJSON(40, null, null); 
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
+
+    //Show all seervices of an business by his ID
+    $app->get('/services/:bid', function($bid) use($db,$app){
+        global $vId;
+        $bid = validate($vId, $bid);
+        if($bid){
+            try {
+                if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
+                   $rows = getData("SELECT service_id AS id, service_name AS name, service_description AS description, service_price AS price FROM service WHERE fk_business_id = $bid");  
+                    if(rowCount($rows)){
+                        echo sendJSON(20, null, $rows);
+                    } else {
+                        echo sendJSON(30, null, null);
+                    }
+               } else {
+                    echo sendJSON(45,null, null);
+               }          
             } catch (Exception $e) {
                echo sendJSON(40, null, null); 
             }
