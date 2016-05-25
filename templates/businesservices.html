@@ -1,0 +1,39 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Get business services";
+	var Metodo = "GET";
+	var table = CodeTable(["20", "30", "45", "60"]);
+	var conditions = ConditionTable(["bid"]);
+	var Descripcion = "Returns all services of a certain business<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"business/services/:bid";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		
+		var id = $("#id").val();
+		if(id == ""){
+			id = 0;
+		}
+
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"business/services/"+id, Metodo, "");
+
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+
+<label>Business ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="Business ID">
+</div>
+
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Get information</button>
