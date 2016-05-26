@@ -1,0 +1,78 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Create a new request of a service";
+	var Metodo = "POST";
+	var table = CodeTable(["21", "40", "44", "45", "48", "52", "60"]);
+	var conditions = ConditionTable(["id", "ccid", "sid", "lat", "lng"]);
+	var Descripcion = "Create new request of a service by giving the user id, Credit card id with which the service will pay, id of the requested service and the current coords where the user is.<br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"do_service/create";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var id          = $("#id").val();
+		var ccid          = $("#ccid").val();
+		var sid          = $("#sid").val();
+		var lat          = $("#latitude").val();
+		var lng          = $("#longitude").val();
+
+		var data        = "id="+id+"&ccid="+ccid+"&sid="+sid+"&lat="+lat+"&lng="+lng;
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(URL, Metodo, data);
+	});
+		$("#getpostbtn").on('click', function() {
+		$.ajax({
+		  method: "POST",
+		  url: "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAwHVWvL7zZou6jj40IN9RbxXFn087kdUg",
+		  data: "",
+			success: function(response) {
+				console.log(response);
+				var lat = response.location.lat+0.0041078;
+				var lng = response.location.lng-0.0034313;
+				$("#latitude").val(lat);
+				$("#longitude").val(lng);
+			}
+		});
+	});
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>User ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>Service ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='sid' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>Credit card ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='ccid' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>Latitude</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='latitude' type="text" placeholder="Latitude" value="">
+</div>
+<br><br>
+<label>Longitude</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='longitude' type="text" placeholder="Longitude" value="">
+</div>
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='getpostbtn'>Get your current position</button>
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Create request of the service</button>
+

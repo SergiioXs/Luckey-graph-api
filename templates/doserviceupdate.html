@@ -1,0 +1,49 @@
+<script type="text/javascript">
+/* I N F O R M A T I O N */
+	var Titulo = "Update status of an active service";
+	var Metodo = "PUT";
+	var table = CodeTable(["22", "40", "53", "60"]);
+	var conditions = ConditionTable(["status", "rate"]);
+	var Descripcion = "Business or user can update the service that links them.<br><ul><li>First business can update to confirm(2) or decline(4) the requested service.</li><li>If the business accepts. After he realize the service, he may again update the status of the service by the state -Pending user  payment(5)-</li><li>To end the service, the user must update the status to -Work done(3)- and service quality.</li></ul><br>This is the list of the active service code<br><table class='ui table'><thead><tr><th>Code</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>Service requested. Waiting for business confirmation.</td></tr><tr><td>2</td><td>Pending service. Waiting for service to be performed.</td><tr><td>3</td><td>Service done!. User pay and quality the service.</td></tr><tr><td>4</td><td>Business declines the request of the user.</td></tr><tr><td>5</td><td>Work done, Waiting for user payment and quality.</td></tr></tbody></table> <br><br>"+exampleMessage+""+table+""+conditions;
+	var URL = dominio+"do_service/update/status/:do_service_id";
+
+/* T E M P L A T E */ 
+	$("#Titulo").html(Titulo);
+	$("#method").html(Metodo);
+	$("#URL").html(URL);
+	$("#URL").val(URL);
+	$("#Descripcion").html(Descripcion);
+
+	$("#btn").on('click', function () {
+		var id          = $("#id").val();
+		var status      = $("#status").val();
+		var rate        = $("#rate").val();
+
+		var data        = "status="+status+"&rate="+rate+"&_METHOD=PUT";
+		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
+		AJAX(dominio+"do_service/update/status/"+id, Metodo, data);
+	});
+		
+</script>
+
+<!-- F O R M    F O R    I N P U T     C O D E    -->
+<label>Active service ID</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='id' type="text" placeholder="User ID">
+</div>
+<br><br>
+<label>status</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='status' type="number" placeholder="Service status" value="">
+</div>
+<br><br>
+<label>Rate the service (Not necesary for every update, if you don't send it will be automatic 'Bad service(2)')</label>
+<br>
+<div class="ui input" style="width: 95%;">
+  <input id='rate' type="number" placeholder="Rate the service" value="">
+</div>
+<br><br>
+<button class='ui teal button' style="width: 95%;" id='btn'>Create request of the service</button>
+
