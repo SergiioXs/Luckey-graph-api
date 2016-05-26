@@ -11,7 +11,7 @@ $vPassword  = "/^[a-zA-Z0-9\@\#\%\!\*\_\-\+\/]{8,64}$/"; // Numbers, letters and
 $vUsername  = "/^[a-zA-Z0-9]{5,64}$/"; //Numbers and letters
 $vPhone     = "/^[0-9]{10}$/"; //10 Numbers (lada) and phone number
 $vRole      = "/^(1|2)$/"; //1 User, 2 Locksimith
-$vRate      = "/^(0|1)$/"; //0 means bad and 1 good
+$vRate      = "/^(1|2)$/"; //2 means bad and 1 good
 /* [{"open": false, "from": "00:00:00", "to": "00:00:00"},{"open": false, "from": "00:00:00", "to": "00:00:00"},{"open": false, "from": "00:00:00", "to": "00:00:00"},{"open": false, "from": "00:00:00", "to": "00:00:00"},{"open": false, "from": "00:00:00", "to": "00:00:00"},{"open": false, "from": "00:00:00", "to": "00:00:00"},{"open": false, "from": "00:00:00", "to": "00:00:00"}] */
 
 $vSchedule  = "/\"^\[(\{\"open\"\: ((true)|(false))\, \"from\"\: \"((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])\:([0-5][0-9])\"\, \"to\"\: \"((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])\:([0-5][0-9])\"\},){6}(\{\"open\"\: ((true)|(false))\, \"from\"\: \"((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])\:([0-5][0-9])\"\, \"to\"\: \"((0[0-9])|(1[0-9])|(2[0-3]))\:([0-5][0-9])\:([0-5][0-9])\"\})\]$\"/"; //[{"open": true|false, "from": "hh:mm:ss", "to": "hh:mm:ss"} <7times> ] 
@@ -27,7 +27,8 @@ $vDescription = "/^[a-zA-Z0-9áéíóúñ\_\.\,\-\/\*\+\%\(\)\@ ]+$/"; // letter
 $vComment     = "/^[a-zA-Z0-9\_\.\,\-\/\*\+\%\(\)\@]{3}[ a-zA-Z0-9\_\.\,\-\/\*\+\%\(\)\@]{1,64}$/"; // letters . , - / * + % ( )
 $vPrice       = "/^[0-9]+([\.]{1}[0-9]+)?$/"; // Pendiente
 $vPreference  = "/^(1|2)$/";
-$vCoords       = "/^(-)?[0-9]+([\.]{1}[0-9]+)?$/";
+$vCoords      = "/^(-)?[0-9]+([\.]{1}[0-9]+)?$/";
+$vStatus      = "/^[1-5]$/";
 
 //Obtenemos todos los valores de una tabla
  function getAllData($table){
@@ -126,6 +127,9 @@ function getStatusMSG($code) {
             break; 
         case 52:
             $msg = "Service doesn’t exist";
+            break;    
+        case 53:
+            $msg = "There is not active service with that id";
             break;            
         case 60:
             $msg = "One or more fields do not meet the requirements.";
