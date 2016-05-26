@@ -19,6 +19,7 @@ $app->group('/luckey', function() use($db,$app){
 	require 'Slim/routes/credit_card.php';
 	require 'Slim/routes/service.php';
 	require 'Slim/routes/done_service.php';
+	require 'Slim/routes/do_service.php';
 	// Routes for tiradoApp
 	require 'Slim/routes/app.php';
 });
