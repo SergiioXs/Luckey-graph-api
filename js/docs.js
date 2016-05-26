@@ -21,6 +21,7 @@ $(document).ready( function () {
         {code:"50", description:"Credit card already exist"},
         {code:"51", description:"User already have a business."},
         {code:"52", description:"Service doesn’t exist"},
+        {code:"53", description:"There is not an active service with that specifications"},
         {code:"60", description:"One or more fields do not meet the requirements."}
     ];
     conditionList = [
@@ -48,14 +49,15 @@ $(document).ready( function () {
         {parameter:"Service Description", name:"description", description:"Only letters and some special characters(_ . , - / * + % ( ) @) are allowed. (8 - 64 characters)"},
         {parameter:"Service price", name:"price", description:"Price value must be a positive entire or double number, only one dot are allowed and it must be after of a number."},
         {parameter:"Comment", name:"comment", description:"Only letters and some special characters(_ . , - / * + % ( ) @) are allowed. (8 - 64 characters)"},
-        {parameter:"Rate", name:"rate", description:"Value 1 means a good work, and value 0 is a bad work"},
+        {parameter:"Rate", name:"rate", description:"Value 1 means a good work, and value 2 is a bad work"},
         {parameter:"Credit card id", name:"ccid", description:"The Credit card id must be only a positive entire number. It is extremely important that the Credit card ID is entered, otherwise the http server response could be error 404 (not found)"},
         {parameter:"Service id", name:"sid", description:"The service id must be only a positive entire number. It is extremely important that the service ID is entered, otherwise the http server response could be error 404 (not found)"},
         {parameter:"Done sevice id", name:"dsid", description:"The done service id must be only a positive entire number. It is extremely important that the done service ID is entered, otherwise the http server response could be error 404 (not found)"},
         {parameter:"Method for update", name:"_METHOD", description:"The value MUST be PUT"},
         {parameter:"Latitude",  name:"lat", description:"Only entire or decimal, positive or negative, numbers are allowed"},
         {parameter:"Longitude", name:"lng", description:"Only entire or decimal, positive or negative, numbers are allowed"},
-        {parameter:"Kilometer", name:"km",  description:"Only positive entire numbers are allowed"}
+        {parameter:"Kilometer", name:"km",  description:"Only positive entire numbers are allowed"},
+        {parameter:"Service status", name:"status",  description:"Describe the actual situation of an service it could be 1, 2, 3, 4 or 5"}
     ];
 
     exampleMessage = "To see an example for this function, try using the Form situated inside of the input section. ";
