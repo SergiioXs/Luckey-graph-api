@@ -26,7 +26,7 @@
 				obj = eval(response);
 				business = [];
 				for (var i = 1; i <= obj._count; i++) {
-					business[i] = [obj.data[0].list[i-1].name, obj.data[0].list[i-1].latitude, obj.data[0].list[i-1].longitude]; 
+					business[i] = [obj.data[i-1].name, obj.data[i-1].latitude, obj.data[i-1].longitude]; 
 				}
 				$("#output").html("<div id='map_canvas' style='width: 100%; height: 400px;'></div>");
 				initializeMaps(business);
