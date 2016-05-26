@@ -337,7 +337,7 @@ $app->group('/user', function() use($db,$app){
             echo sendJSON(60, null, null);
         }
     });
-
+/* Function deprecated after v3.0
     // History
     $app->get('/history/:id', function($id) use($db,$app){
         global $vId;
@@ -384,8 +384,40 @@ $app->group('/user', function() use($db,$app){
             echo sendJSON(60, null, null);
         }
     });
-
-    
+*/
+    //Get history
+    $app->get('/history/:id', function($id) use($db,$app){
+        global $vId;
+        $id = validate($vId, $id);
+        if($id){
+            if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id"))){
+                try {
+                $r = getData("SELECT 
+                                business_id AS businessId,
+                                (SELECT business_name FROM business WHERE business_id = do_service.business_id) AS businessName,
+                                service_name AS serviceName,
+                                service_description AS description,
+                                service_price AS price,
+                                service_rate AS rate,
+                                date
+                                FROM do_service
+                                WHERE user_id = $id AND status = 3  
+                            ");
+                if(rowCount($r)){
+                    echo sendJSON(20, null, $r);
+                } else {
+                    echo sendJSON(30, null, null);
+                }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
+                } 
+            } else {
+                echo sendJSON(45, null, null);
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
 
 });
 

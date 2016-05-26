@@ -71,7 +71,7 @@ $app->get('/geolocation/near', function() use($db,$app){
     $km  = validate($vId,     $R->params("km"));
     if($lat && $lng && $km){
 	    try {
-	    	$r = getData("SELECT business_id AS id, business_name AS name, latitude, longitude,  
+	    	$r = getData("SELECT business_id AS id, business_phone AS phone, business_name AS name, latitude, longitude,  
 	    					(6371 * ACOS( 
                                 SIN(RADIANS(latitude)) * SIN(RADIANS($lat)) 
                                 + COS(RADIANS(longitude - $lng)) * COS(RADIANS(latitude)) 
@@ -152,11 +152,10 @@ $app->get('/geolocation/near', function() use($db,$app){
         $address   = validate($vAddress,      $R->params('address'));  
         $phone     = validate($vPhone,        $R->params('phone'));     
         $schedule  = $R->params('schedule');
-        //$userid    = validate($vId,           $R->params('id'));
-
         //Datos para crear el usuario que contendra el business
         $email     = validate($vEmail,        $R->params('email'));
         $password  = validate($vPassword,     $R->params('password')); //Nueva password del business
+        
         if($name && $address && $phone && $email && $password){
             if(!rowCount(getData("SELECT user_id FROM user WHERE user_email = '$email'"))) {
                     try {        
@@ -379,7 +378,132 @@ $app->get('/geolocation/near', function() use($db,$app){
     });
 
 
+//Get stadistics
+    $app->get('/stadistics/:bid', function($bid) use($db,$app){
+        global $vId;
+        $bid = validate($vId, $bid);
+        if($bid){
+            if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
+                try {
+                $r = getData("SELECT 
+                                count(do_service_id) AS totalServices,
+                                SUM(service_price) AS amountEarned,
+                                (SELECT COUNT(service_rate) FROM do_service WHERE service_rate = 2 AND business_id = $bid AND status = 3) AS badRate,
+                                (SELECT COUNT(service_rate) FROM do_service WHERE service_rate = 1 AND business_id = $bid AND status = 3) AS goodRate
+                                FROM do_service
+                                WHERE business_id = $bid AND status = 3
+                            ");
+                if(rowCount($r)){
+                    echo sendJSON(20, null, $r);
+                } else {
+                    echo sendJSON(30, null, null);
+                }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
+                } 
+            } else {
+                echo sendJSON(45, null, null);
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
 
+//Get historial
+    $app->get('/history/:bid', function($bid) use($db,$app){
+        global $vId;
+        $bid = validate($vId, $bid);
+        if($bid){
+            if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
+                try {
+                $r = getData("SELECT 
+                                service_name AS name,
+                                service_description AS description,
+                                service_price AS price,
+                                date,
+                                status 
+                                FROM do_service
+                                WHERE business_id = $bid AND status BETWEEN 3 AND 4  
+                            ");
+                if(rowCount($r)){
+                    echo sendJSON(20, null, $r);
+                } else {
+                    echo sendJSON(30, null, null);
+                }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
+                } 
+            } else {
+                echo sendJSON(45, null, null);
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
+
+    //Get pending service
+    $app->get('/pending_service/:bid', function($bid) use($db,$app){
+        global $vId;
+        $bid = validate($vId, $bid);
+        if($bid){
+            if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
+                try {
+                $r = getData("SELECT 
+                                service_name AS name,
+                                service_description AS description,
+                                service_price AS price,
+                                date,
+                                status 
+                                FROM do_service
+                                WHERE business_id = $bid AND status = 2  
+                            ");
+                if(rowCount($r)){
+                    echo sendJSON(20, null, $r);
+                } else {
+                    echo sendJSON(30, null, null);
+                }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
+                } 
+            } else {
+                echo sendJSON(45, null, null);
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
+
+    //Get request service
+    $app->get('/request_service/:bid', function($bid) use($db,$app){
+        global $vId;
+        $bid = validate($vId, $bid);
+        if($bid){
+            if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
+                try {
+                $r = getData("SELECT 
+                                service_name AS name,
+                                service_description AS description,
+                                service_price AS price,
+                                date,
+                                status 
+                                FROM do_service
+                                WHERE business_id = $bid AND status = 1  
+                            ");
+                if(rowCount($r)){
+                    echo sendJSON(20, null, $r);
+                } else {
+                    echo sendJSON(30, null, null);
+                }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
+                } 
+            } else {
+                echo sendJSON(45, null, null);
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
 
 
 
