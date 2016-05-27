@@ -1,9 +1,9 @@
 <script type="text/javascript">
 /* I N F O R M A T I O N */
 	var Titulo = "Update user";
-	var Metodo = "PUT";
+	var Metodo = "POST";
 	var table = CodeTable(["22", "42", "43", "44", "60"]);
-	var conditions = ConditionTable(["firstname", "lastname", "username", "id", "password", "email", "_METHOD"]);
+	var conditions = ConditionTable(["firstname", "lastname", "username", "id", "password", "email"]);
 	var Descripcion = "Updates the basic information of a previously created account, it must be confirmed by the user using your password.<br><br>Here is a table of status code that the API could send.<br><br>"+exampleMessage+""+table+""+conditions;
 	var URL = dominio+"user/update/:id";
 
@@ -22,7 +22,7 @@
 		var id     	      = $("#id").val();
 		var email         = $("#email").val();
 		var password      = $("#password").val();
-		var data          = "firstname="+firstname+"&lastname="+lastname+"&username="+username+"&email="+email+"&password="+password+"&_METHOD=PUT";
+		var data          = "firstname="+firstname+"&lastname="+lastname+"&username="+username+"&email="+email+"&password="+password;
 		$("#output").html("<div class='ui active inverted dimmer'><div class='ui text loader'>Loading</div></div>");
 		console.log(data);
 		AJAX(dominio+"user/update/"+id, Metodo, data);

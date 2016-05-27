@@ -1,7 +1,7 @@
 <script type="text/javascript">
 /* I N F O R M A T I O N */
 	var Titulo = "Update status of an active service";
-	var Metodo = "PUT";
+	var Metodo = "POST";
 	var table = CodeTable(["22", "40", "53", "60"]);
 	var conditions = ConditionTable(["status", "rate"]);
 	var Descripcion = "Business or user can update the service that links them.<br><ul><li>First business can update to confirm(2) or decline(4) the requested service.</li><li>If the business accepts. After he realize the service, he may again update the status of the service by the state -Pending user  payment(5)-</li><li>To end the service, the user must update the status to -Work done(3)- and service quality.</li></ul><br>This is the list of the active service code<br><table class='ui table'><thead><tr><th>Code</th><th>Description</th></tr></thead><tbody><tr><td>1</td><td>Service requested. Waiting for business confirmation.</td></tr><tr><td>2</td><td>Pending service. Waiting for service to be performed.</td><tr><td>3</td><td>Service done!. User pay and quality the service.</td></tr><tr><td>4</td><td>Business declines the request of the user.</td></tr><tr><td>5</td><td>Work done, Waiting for user payment and quality.</td></tr></tbody></table> <br><br>"+exampleMessage+""+table+""+conditions;
