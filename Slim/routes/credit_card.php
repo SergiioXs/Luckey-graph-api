@@ -7,7 +7,7 @@ $app->group('/credit_card', function() use($db,$app){
     $app->get('/', function() use($db,$app){
        $rows = getData("SELECT credit_card_id AS id, credit_card_name AS name, credit_card_number AS number, credit_card_valid_thru AS date, credit_card_cvc AS cvc, credit_card_postal_code AS postalCode FROM credit_card");
  
-       echo sendJSON(20, "creditCard", $rows);
+       echo sendJSON(20, null, $rows);
     });
 
 //Describe a credit card by ID
@@ -21,7 +21,7 @@ $app->group('/credit_card', function() use($db,$app){
                              WHERE credit_card_id = $id");
 
             if(rowCount($rows))
-                echo sendJSON(20, "creditCard", $rows);
+                echo sendJSON(20, null, $rows);
             else
                 echo sendJSON(30, null, null);
             } catch (Exception $e) {
@@ -43,7 +43,7 @@ $app->group('/credit_card', function() use($db,$app){
         $cvc       = validate($vCvc,    $R->params('cvc'));
         $cp        = validate($vCp,     $R->params('cp'));
         $userid    = validate($vId,     $R->params('id'));
-        
+        echo $name."/".$number."/".$date."/".$cvc."/".$cp."/".$userid;
         if($name && $number && $date && $cvc && $cp && $userid){
             try {
                 /* CHECK IF USER EXIST */

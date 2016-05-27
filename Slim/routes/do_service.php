@@ -107,7 +107,7 @@ $app->group('/do_service', function() use($db,$app){
     });
 
 //update a status service
-    $app->put('/update/status/:dsid', function($dsid) use($db,$app){
+    $app->post('/update/status/:dsid', function($dsid) use($db,$app){
         global $vId, $vStatus, $vRate;
             $R      = $app->request;
             $dsid   = validate($vId, $dsid);

@@ -59,6 +59,8 @@ $app->group('/user', function() use($db,$app){
         }
     });
 
+
+
 //Describe an user by the ID
     $app->get('/:id', function($id) use($db,$app){
         global $vId;
@@ -125,8 +127,9 @@ $app->group('/user', function() use($db,$app){
         
     });
 
-//Update an user by the ID
-    $app->put('/update/:id', function($id) use($db,$app){
+$app->group('/update', function() use($db,$app){
+    //Update an user by the ID
+    $app->post('/:id', function($id) use($db,$app){
         global $vFirstName, $vLastName, $vUsername, $vPassword, $vId, $vEmail; 
         $R           = $app->request;
         $firstname   = validate($vFirstName,  $R->params('firstname')); //Solo letras
@@ -139,11 +142,10 @@ $app->group('/user', function() use($db,$app){
         if($firstname && $lastname && $username && $password && $uid && $email){
             $password = sha1($password);
             $ExistUser = getData("SELECT user_email FROM user WHERE user_id = $id");
-
+            $ExistUser = $ExistUser[0]['user_email'];
             if(rowCount($ExistUser)){
                 // Password match
                 if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id AND user_password = '$password'"))) {
-                    
                     
                     if($email != $ExistUser){
                         if(rowCount(getData("SELECT user_id FROM user WHERE user_email = '$email'"))){
@@ -181,46 +183,47 @@ $app->group('/user', function() use($db,$app){
         
     });
 
-//Update an user by the ID
-    $app->put('/update/password/:id', function($id) use($db,$app){
-        global $vId, $vPassword;
-        $R           = $app->request;
-        $newpassword = validate($vPassword, $R->params('newpassword'));
-        $password    = $R->params('password');
-        $uid         = validate($vId, $id); 
-        
-        if($newpassword && $uid){
+    //Update an user by the ID
+        $app->post('/password/:id', function($id) use($db,$app){
+            global $vId, $vPassword;
+            $R           = $app->request;
+            $newpassword = validate($vPassword, $R->params('newpassword'));
+            $password    = $R->params('password');
+            $uid         = validate($vId, $id); 
+            
+            if($newpassword && $uid){
 
-            $newpassword = sha1($newpassword);
-            $password    = sha1($password);
-            $ExistUser = getData("SELECT user_id FROM user WHERE user_id = $id");
-            if(rowCount($ExistUser)){
+                $newpassword = sha1($newpassword);
+                $password    = sha1($password);
+                $ExistUser = getData("SELECT user_id FROM user WHERE user_id = $id");
+                if(rowCount($ExistUser)){
 
-                // Password match
-                if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id AND user_password = '$password'"))) {
-                    try {
+                    // Password match
+                    if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id AND user_password = '$password'"))) {
+                        try {
 
-                        /* UPDATE BASIC INFORMATION*/
-                        SQL("UPDATE user SET
-                                user_password = '$newpassword'
-                             WHERE user_id = $id;
+                            /* UPDATE BASIC INFORMATION*/
+                            SQL("UPDATE user SET
+                                    user_password = '$newpassword'
+                                 WHERE user_id = $id;
 
-                            ");    
-                        echo sendJSON(22, null, null); // All data has been changed successfully.
-                    } catch (Exception $e) {
-                       echo sendJSON(40, null, null); //Error 
+                                ");    
+                            echo sendJSON(22, null, null); // All data has been changed successfully.
+                        } catch (Exception $e) {
+                           echo sendJSON(40, null, null); //Error 
+                        }
+                    } else {
+                        echo sendJSON(43, null, null); //Passwords don't match
                     }
                 } else {
-                    echo sendJSON(43, null, null); //Passwords don't match
+                    echo sendJSON(44, null, null); //Doesn't exist that user 
                 }
             } else {
-                echo sendJSON(44, null, null); //Doesn't exist that user 
+                echo sendJSON(60, null, null);
             }
-        } else {
-            echo sendJSON(60, null, null);
-        }
-        
-    });
+            
+        });
+});
 
 //Delete an user by the ID
     $app->post('/delete/:id', function($id) use($db,$app){
@@ -418,6 +421,42 @@ $app->group('/user', function() use($db,$app){
             echo sendJSON(60, null, null);
         }
     });
+
+    //Show a list of pending service to pay
+    $app->get('/service_to_pay/:id', function($id) use($db,$app){
+        global $vId;
+        $id = validate($vId, $id);
+        if($id){
+            if(rowCount(getData("SELECT user_id FROM user WHERE user_id = $id"))){
+                try {
+                $r = getData("SELECT 
+                                do_service_id AS id,
+                                service_name AS name,
+                                service_description AS description,
+                                service_price AS price,
+                                date,
+                                status 
+                                FROM do_service
+                                WHERE user_id = $id AND status = 5  
+                                ORDER BY date DESC
+                            ");
+                if(rowCount($r)){
+                    echo sendJSON(20, null, $r);
+                } else {
+                    echo sendJSON(30, null, null);
+                }
+                } catch (Exception $e) {
+                   echo sendJSON(40, null, null); 
+                } 
+            } else {
+                echo sendJSON(45, null, null);
+            }
+        } else {
+            echo sendJSON(60, null, null);
+        }
+    });
+
+
 
 });
 

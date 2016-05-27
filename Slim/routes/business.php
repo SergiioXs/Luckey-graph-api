@@ -449,6 +449,7 @@ $app->get('/geolocation/near', function() use($db,$app){
             if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
                 try {
                 $r = getData("SELECT 
+                                do_service_id AS id,
                                 service_name AS name,
                                 service_description AS description,
                                 service_price AS price,
@@ -481,6 +482,7 @@ $app->get('/geolocation/near', function() use($db,$app){
             if(rowCount(getData("SELECT business_id FROM business WHERE business_id = $bid"))){
                 try {
                 $r = getData("SELECT 
+                                do_service_id AS id,
                                 service_name AS name,
                                 service_description AS description,
                                 service_price AS price,
